@@ -107,7 +107,7 @@ struct background
   //double scf_A; /**< \f$ \alpha \f$ : Albrecht-Skordis offset */
 
   double Omega0_k; /**< \f$ \Omega_{0_k} \f$: curvature contribution */
-
+  double tau_dcdm;
   int N_ncdm;                            /**< Number of distinguishable ncdm species */
   double * M_ncdm;                       /**< vector of masses of non-cold relic:
                                              dimensionless ratios m_ncdm/T_ncdm */
@@ -578,7 +578,11 @@ extern "C" {
 #define _c_ 2.99792458e8            /**< c in m/s */
 #define _G_ 6.67428e-11             /**< Newton constant in m^3/Kg/s^2 */
 #define _eV_ 1.602176487e-19        /**< 1 eV expressed in J */
-
+#define _eV_over_Kelvin_ 8.626e-5   /**< kB in eV/K */
+#define _eV_over_joules_ 6.24150647996e+18 /**< eV/J */
+#define _eV_over_ergs_ 6.24150647996e11 /**< eV/J */
+#define _joules_over_ergs_ 1e-7 /**< eV/J */
+#define _Sun_mass_over_kg_ 1.98855e30 /**< M_sun in kg */
 /* parameters entering in Stefan-Boltzmann constant sigma_B */
 #define _k_B_ 1.3806504e-23 // in J/K
 #define _h_P_ 6.62606896e-34 //in Js

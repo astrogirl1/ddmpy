@@ -369,7 +369,6 @@ struct precision
    * parameter controlling precision of background integration
    */
   double tol_background_integration;
-  
 
 
   /**
@@ -439,15 +438,7 @@ struct precision
   FileName sBBN_file;
 /* @endcond */
   /* - for recombination */
-  FileName  command_fz;
-  FileName energy_injec_coeff_file;
-  FileName energy_injec_f_eff_file;
-  short fz_is_extern; /**< flag to specify if the fz_functions are given in a file or are calculated externally */
-  double param_fz_1;  /**< one parameter used in 'external_fz' */
-  double param_fz_2;  /**< one parameter used in 'external_fz' */
-  double param_fz_3;  /**< one parameter used in 'external_fz' */
-  double param_fz_4;  /**< one parameter used in 'external_fz' */
-  double param_fz_5;  /**< one parameter used in 'external_fz' */
+
   /* initial and final redshifts in recfast */
 
   double recfast_z_initial;      /**< initial redshift in recfast */
