@@ -167,9 +167,9 @@ double * reio_inter_xe; /**< discrete \f$ X_e(z)\f$ values */
 
   /** parameters used by planck 16 asymmetric parametrization */
 
-  double z_end_asymmetric_planck_16;
-  double z_start_asymmetric_planck_16;
-  double alpha_asymmetric_planck_16;
+  // double z_end_asymmetric_planck_16;
+  // double z_start_asymmetric_planck_16;
+  // double alpha_asymmetric_planck_16;
 
   /** parameters used by reio_stars_sfr_source_term and heating_by_stars_parametrization*/
 
@@ -627,9 +627,9 @@ struct reionization {
 
   /* parameters used by planck 16 asymmetric parametrization */
 
-  int index_z_end_asymmetric_planck_16;
-  int index_z_start_asymmetric_planck_16;
-  int index_alpha_asymmetric_planck_16;
+  // int index_z_end_asymmetric_planck_16;
+  // int index_z_start_asymmetric_planck_16;
+  // int index_alpha_asymmetric_planck_16;
 
 
   /* parameters used by all schemes */

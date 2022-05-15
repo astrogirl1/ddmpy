@@ -1657,6 +1657,14 @@ int input_read_parameters(
     class_read_list_of_doubles("reio_inter_z",pth->reio_inter_z,pth->reio_inter_num);
     class_read_list_of_doubles("reio_inter_xe",pth->reio_inter_xe,pth->reio_inter_num);
   }
+//* COPIED FROM EXOCLASS, REMOVE IF NEEDED*//
+  // if (pth->reio_parametrization == reio_asymmetric_planck_16){
+  //   class_read_double("helium_fullreio_redshift",pth->helium_fullreio_redshift);
+  //   class_read_double("helium_fullreio_width",pth->helium_fullreio_width);
+  //   class_read_double("alpha_asymmetric_planck_16",pth->alpha_asymmetric_planck_16);
+  //   class_read_double("z_end_asymmetric_planck_16",pth->z_end_asymmetric_planck_16);
+  //   class_read_double("z_start_asymmetric_planck_16",pth->z_start_asymmetric_planck_16);
+  // }
 
   /** - energy injection parameters from CDM annihilation/decay */
 
@@ -3821,7 +3829,7 @@ int input_default_precision ( struct precision * ppr ) {
   ppr->start_large_k_at_tau_h_over_tau_k = 0.07;  /* decrease to start earlier in time */
   ppr->tight_coupling_trigger_tau_c_over_tau_h=0.015; /* decrease to switch off earlier in time */
   ppr->tight_coupling_trigger_tau_c_over_tau_k=0.01; /* decrease to switch off earlier in time */
-  ppr->start_sources_at_tau_c_over_tau_h = 0.008; /* decrease to start earlier in time */
+  ppr->start_sources_at_tau_c_over_tau_h = 0.0008; /* decrease to start earlier in time */
   ppr->tight_coupling_approximation=(int)compromise_CLASS;
 
   ppr->l_max_g=12;
