@@ -812,24 +812,24 @@ int input_read_parameters(
       pba->Omega_ini_dcdm = (param3/(1.-param3))*pba->Omega0_cdm;
 
     /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
-    class_call(parser_read_double(pfc,"Gamma_dcdm",&param1,&flag1,errmsg),
+    class_call(parser_read_double(pfc,"Gamma_dcdm_exo",&param1,&flag1,errmsg),
                errmsg,
                errmsg);
-    class_call(parser_read_double(pfc,"Log10_Gamma_dcdm",&param2,&flag2,errmsg),
+    class_call(parser_read_double(pfc,"Log10_Gamma_dcdm_exo",&param2,&flag2,errmsg),
                errmsg,
                errmsg);
 
     class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
                errmsg,
-               "In input file, you can only enter one of Gamma_dcdm or Log10_Gamma_dcdm, choose one");
+               "In input file, you can only enter one of Gamma_dcdm_exo or Log10_Gamma_dcdm_exo, choose one");
 
      /* Convert to Mpc */
     if (flag1 == _TRUE_)
-      pba->Gamma_dcdm = param1*(1.e3 / _c_);
+      pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
     if (flag2 == _TRUE_)
-      pba->Gamma_dcdm = pow(10.,param2)*(1.e3 / _c_);
+      pba->Gamma_dcdm_exo = pow(10.,param2)*(1.e3 / _c_);
 
-    pba->epsilon_dcdm = 1;
+    // pba->epsilon_dcdm_wdm = 1;
 
   }
     /*Read photon_energy*/
@@ -841,7 +841,7 @@ int input_read_parameters(
     // printf("This reads photon_energy %g \n", pth->photon_energy);
   }
 
-  // GFA: epsilon_dcdm parameter is read here because it is needed later for getting Gamma from log10(Gamma*epsilon)
+  // GFA: epsilon_dcdm_wdm parameter is read here because it is needed later for getting Gamma from log10(Gamma*epsilon)
 
   class_read_int("N_ncdm",N_ncdm);
 
@@ -853,37 +853,37 @@ int input_read_parameters(
       class_call(parser_read_double(pfc,"m_dcdm",&param1,&flag1,errmsg),
                  errmsg,
                  errmsg);
-      class_call(parser_read_double(pfc,"log10_epsilon_dcdm",&param2,&flag2,errmsg),
+      class_call(parser_read_double(pfc,"log10_epsilon_dcdm_wdm",&param2,&flag2,errmsg),
                  errmsg,
                  errmsg);
-      class_call(parser_read_double(pfc,"epsilon_dcdm",&param3,&flag3,errmsg),
+      class_call(parser_read_double(pfc,"epsilon_dcdm_wdm",&param3,&flag3,errmsg),
                  errmsg,
                  errmsg);
       class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
                  errmsg,
-                 "In input file, you can only enter one of m_dcdm or log10espilon_dcdm or epsilon_dcdm, choose one");
+                 "In input file, you can only enter one of m_dcdm or log10espilon_dcdm or epsilon_dcdm_wdm, choose one");
       class_test(((flag1 == _TRUE_) && (flag3 == _TRUE_)),
                  errmsg,
-                 "In input file, you can only enter one of m_dcdm or log10espilon_dcdm or epsilon_dcdm, choose one");
+                 "In input file, you can only enter one of m_dcdm or log10espilon_dcdm or epsilon_dcdm_wdm, choose one");
       class_test(((flag2 == _TRUE_) && (flag3 == _TRUE_)),
                  errmsg,
-                 "In input file, you can only enter one of m_dcdm or log10espilon_dcdm or epsilon_dcdm, choose one");
+                 "In input file, you can only enter one of m_dcdm or log10espilon_dcdm or epsilon_dcdm_wdm, choose one");
 
       /* GFA: Convert Gamma to Mpc */
       if (flag1 == _TRUE_)
         pba->m_dcdm = param1;
-        pba->epsilon_dcdm= 0.5*(1 - pow(pba->m_dcdm/pba->M_dcdm,2));
+        pba->epsilon_dcdm_wdm= 0.5*(1 - pow(pba->m_dcdm/pba->M_dcdm,2));
       if (flag2 == _TRUE_)
-        pba->epsilon_dcdm = pow(10,param2);
-        pba->m_dcdm = pba->M_dcdm * pow(1 - 2 * pba->epsilon_dcdm,0.5);
+        pba->epsilon_dcdm_wdm = pow(10,param2);
+        pba->m_dcdm = pba->M_dcdm * pow(1 - 2 * pba->epsilon_dcdm_wdm,0.5);
       if (flag3 == _TRUE_)
-        pba->epsilon_dcdm = param3;
-        pba->m_dcdm = pba->M_dcdm * pow(1 - 2 * pba->epsilon_dcdm,0.5);
+        pba->epsilon_dcdm_wdm = param3;
+        pba->m_dcdm = pba->M_dcdm * pow(1 - 2 * pba->epsilon_dcdm_wdm,0.5);
 
-    //   printf("pba->m_dcdm %e pba->epsilon_dcdm %e\n",pba->m_dcdm,pba->epsilon_dcdm);
+    //   printf("pba->m_dcdm %e pba->epsilon_dcdm_wdm %e\n",pba->m_dcdm,pba->epsilon_dcdm_wdm);
 
       if (flag1 == _FALSE_ && flag2 == _FALSE_ && flag3 == _FALSE_) {
-        pba->epsilon_dcdm = 1;
+        pba->epsilon_dcdm_wdm = 1;
       }
 
   }
@@ -923,36 +923,36 @@ int input_read_parameters(
       pba->Omega_ini_dcdm2 = param2/pba->h/pba->h;
 
    /** GFA: - Read Gamma2 (two-body decay) in same units as H0, i.e. km/(s Mpc)*/
-     class_call(parser_read_double(pfc,"Gamma_dcdm",&param1,&flag1,errmsg),
+     class_call(parser_read_double(pfc,"Gamma_dcdm_wdm",&param1,&flag1,errmsg),
                 errmsg,
                 errmsg);
-     class_call(parser_read_double(pfc,"Log10_Gamma_dcdm",&param2,&flag2,errmsg),
+     class_call(parser_read_double(pfc,"Log10_Gamma_dcdm_wdm",&param2,&flag2,errmsg),
                 errmsg,
                 errmsg);
-     class_call(parser_read_double(pfc,"Log10_Gamma_epsilon_dcdm",&param3,&flag3,errmsg), // In this case, Gamma is in units or Gyrs^-1
+     class_call(parser_read_double(pfc,"Log10_Gamma_epsilon_dcdm_wdm",&param3,&flag3,errmsg), // In this case, Gamma is in units or Gyrs^-1
                 errmsg,
                 errmsg);
      class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
                 errmsg,
-                "In input file, you can only enter one of Gamma_dcdm or Log10_Gamma_dcdm, choose one");
+                "In input file, you can only enter one of Gamma_dcdm_wdm or Log10_Gamma_dcdm_wdm, choose one");
      class_test(((flag1 == _TRUE_) && (flag3 == _TRUE_)),
                 errmsg,
-                "In input file, you can only enter one of Gamma_dcdm or Log10_Gamma_epsilon_dcdm, choose one");
+                "In input file, you can only enter one of Gamma_dcdm_wdm or Log10_Gamma_epsilon_dcdm_wdm, choose one");
      class_test(((flag2 == _TRUE_) && (flag3 == _TRUE_)),
                 errmsg,
-                "In input file, you can only enter one of Log10_Gamma_dcdm or Log10_Gamma_epsilon_dcdm, choose one");
+                "In input file, you can only enter one of Log10_Gamma_dcdm_wdm or Log10_Gamma_epsilon_dcdm_wdm, choose one");
 
      /* GFA: Convert Gamma to Mpc */
      if (flag1 == _TRUE_)
-       pba->Gamma_dcdm = param1*(1.e3 / _c_);
+       pba->Gamma_dcdm_wdm = param1*(1.e3 / _c_);
      if (flag2 == _TRUE_)
-       pba->Gamma_dcdm = pow(10.,param2)*(1.e3 / _c_);
+       pba->Gamma_dcdm_wdm = pow(10.,param2)*(1.e3 / _c_);
      if (flag3 == _TRUE_)
-       pba->Gamma_dcdm = pow(10.,param3 + 2.991 - log10(pba->epsilon_dcdm))*(1.e3 / _c_);
+       pba->Gamma_dcdm_wdm = pow(10.,param3 + 2.991 - log10(pba->epsilon_dcdm_wdm))*(1.e3 / _c_);
    }
    // else{
    //   pba->Omega_ini_dcdm2 = 0;
-   //   pba->Gamma_dcdm = 0;
+   //   pba->Gamma_dcdm_wdm = 0;
    // }
 
 
@@ -1024,7 +1024,7 @@ int input_read_parameters(
 
      /* qmax, if relevant */
      class_read_list_of_doubles_or_default("Maximum q",pba->ncdm_qmax,15,N_ncdm);
-     // printf("pba->Gamma_dcdm %e pba->M_dcdm %e pba->m_dcdm %e \n", pba->Gamma_dcdm , pba->M_dcdm ,pba->m_dcdm);
+     // printf("pba->Gamma_dcdm_wdm %e pba->M_dcdm %e pba->m_dcdm %e \n", pba->Gamma_dcdm_wdm , pba->M_dcdm ,pba->m_dcdm);
      for(n=0; n<N_ncdm; n++){
        class_alloc(pba->PDmax_dcdm,pba->N_ncdm*sizeof(double),pba->error_message);
      if(pba->background_ncdm_distribution[n] == _massive_daughter_){
@@ -3427,7 +3427,8 @@ int input_default_params(
   pba->Omega0_dcdm = 0.0;
   pba->Omega0_wdm = 0.0; /* GFA */
   pba->rho0_wdm_over_rho0_m = 0.0; /* GFA */
-  pba->Gamma_dcdm = 0.0;
+  pba->Gamma_dcdm_wdm = 0.0;
+   pba->Gamma_dcdm_exo = 0.0;
   pba->Gamma_neutrinos = NULL;
   pba->neutrino_hierarchy = degenerate;
   pba->convergence_tol_decaying_neutrinos = 1e-3;
@@ -3444,7 +3445,7 @@ int input_default_params(
   pba->deg_ncdm = NULL;
   pba->ncdm_psd_parameters = NULL;
   pba->ncdm_psd_files = NULL;
-  pth->photon_energy = 0;
+    pth->photon_energy = 0;
 
   pba->Omega0_scf = 0.; /* Scalar field defaults */
   pba->attractor_ic_scf = _TRUE_;
@@ -4441,17 +4442,17 @@ int input_get_guess(double *xguess,
          for Omega_dcdm, not the combined.
          sqrt_one_minus_M = sqrt(1.0 - Omega_M);
          xguess[index_guess] = pfzw->target_value[index_guess]*
-         exp(2./3.*ba.Gamma_dcdm/ba.H0*
+         exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
-         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
+         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm/ba.H0;
+      gamma = ba.Gamma_dcdm_exo/ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
         a_decay = pow(1+(gamma*gamma-1.)/Omega_M,-1./3.);
-        /* GFA: This a_decay is obtained from the Friedmann equation for an universe just with Omega_M and Omega_Lambda=1-Omega_M, imposing H(a_decay)=Gamma_dcdm */
-       /* Then time at a_decay is approximately given by t(a_decay)=(1/Gamma_dcdm)*log(a_decay), so exp(-Gamma_dcdm*t(a_decay))=1/a_decay */
+        /* GFA: This a_decay is obtained from the Friedmann equation for an universe just with Omega_M and Omega_Lambda=1-Omega_M, imposing H(a_decay)=Gamma_dcdm_wdm */
+       /* Then time at a_decay is approximately given by t(a_decay)=(1/Gamma_dcdm_exo)*log(a_decay), so exp(-Gamma_dcdm_exo*t(a_decay))=1/a_decay */
       xguess[index_guess] = pfzw->target_value[index_guess]/a_decay;
       dxdy[index_guess] = 1./a_decay;
       //printf("x = Omega_ini_guess = %g, dxdy = %g\n",*xguess,*dxdy);
@@ -4462,11 +4463,11 @@ int input_get_guess(double *xguess,
          for Omega_dcdm, not the combined.
          sqrt_one_minus_M = sqrt(1.0 - Omega_M);
          xguess[index_guess] = pfzw->target_value[index_guess]*
-         exp(2./3.*ba.Gamma_dcdm/ba.H0*
+         exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
-         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
+         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm/ba.H0;
+      gamma = ba.Gamma_dcdm_exo/ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -4478,7 +4479,7 @@ int input_get_guess(double *xguess,
 
     case Omega_dcdmdrwdm: /* GFA */
      Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
-     gamma = ba.Gamma_dcdm/ba.H0;
+     gamma = ba.Gamma_dcdm_wdm/ba.H0;
     if (gamma < 1)
       a_decay = 1.0;
     else
@@ -4491,7 +4492,7 @@ int input_get_guess(double *xguess,
 
    case omega_dcdmdrwdm: /* GFA */
      Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
-     gamma = ba.Gamma_dcdm/ba.H0;
+     gamma = ba.Gamma_dcdm_wdm/ba.H0;
    if (gamma < 1)
       a_decay = 1.0;
    else
@@ -4530,7 +4531,7 @@ int input_get_guess(double *xguess,
           omega_ini_dcdm -> omega_dcdmdr */
       Omega0_dcdmdr *=pfzw->target_value[index_guess];
       Omega_M = ba.Omega0_cdm+Omega0_dcdmdr+ba.Omega0_b;
-      gamma = ba.Gamma_dcdm/ba.H0;
+      gamma = ba.Gamma_dcdm_exo/ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -4551,7 +4552,7 @@ int input_get_guess(double *xguess,
             omega_ini_dcdm2 -> omega_dcdmdrwdm */
     Omega0_dcdmdrwdm*=pfzw->target_value[index_guess];
     Omega_M = Omega0_dcdmdrwdm+ba.Omega0_cdm+ba.Omega0_b;
-    gamma = ba.Gamma_dcdm/ba.H0;
+    gamma = ba.Gamma_dcdm_wdm/ba.H0;
     if (gamma < 1)
         a_decay = 1.0;
     else

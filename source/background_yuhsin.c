@@ -792,9 +792,9 @@ int background_indices(
 
   if (pba->Omega0_dcdmdr != 0.){
     pba->has_dcdm = _TRUE_;
-    if (pba->Gamma_dcdm != 0. && pba->m_dcdm == 0.)
+    if (pba->Gamma_dcdm_wdm != 0. && pba->m_dcdm == 0.)
       pba->has_dr = _TRUE_;
-    if (pba->Gamma_dcdm != 0. &&  pba->m_dcdm > 0.)
+    if (pba->Gamma_dcdm_wdm != 0. &&  pba->m_dcdm > 0.)
       pba->has_ncdm = _TRUE_;
   }
 
@@ -1134,14 +1134,14 @@ int background_ncdm_distribution(
       H = pba->H0*sqrt(Omega_m * pow(aq,-3)+ Omega_r * pow(aq,-4) + pba->Omega0_lambda);
       t = 2*(Omega_m*pow(Omega_r+Omega_m*aq,0.5)+2*pow(Omega_r,1.5)/aq-2*Omega_r*pow((Omega_r/aq+Omega_m)/aq,0.5))/(3*pow(Omega_m,2)/aq*pba->H0);
       t=MAX(0,t);
-      // printf("aq %e exp(-pba->Gamma_dcdm * t) %e t %e pba->Gamma_dcdm %e pba->H0 %e\n", aq,exp(-pba->Gamma_dcdm * t),t,pba->Gamma_dcdm,pba->H0);
-      // rho_dcdm = pba->Omega_ini_dcdm*pow(aq,-3)*exp(-pba->Gamma_dcdm * t)*3*pba->H0*pba->H0/8./_PI_/(_G_)*_c_*_c_/_Mpc_over_m_;  // convert to kg/Mpc^3
+      // printf("aq %e exp(-pba->Gamma_dcdm_wdm * t) %e t %e pba->Gamma_dcdm_wdm %e pba->H0 %e\n", aq,exp(-pba->Gamma_dcdm_wdm * t),t,pba->Gamma_dcdm_wdm,pba->H0);
+      // rho_dcdm = pba->Omega_ini_dcdm*pow(aq,-3)*exp(-pba->Gamma_dcdm_wdm * t)*3*pba->H0*pba->H0/8./_PI_/(_G_)*_c_*_c_/_Mpc_over_m_;  // convert to kg/Mpc^3
       rho_dcdm = pba->Omega_ini_dcdm*pow(aq,-3)*3*pba->H0*pba->H0/8./_PI_/(_G_)*_c_*_c_/_Mpc_over_m_;  // convert to kg/Mpc^3
       n_dcdm = rho_dcdm*pow(aq,3)/(pba->M_dcdm*1.78e-27*_eV_ / (_c_ * _c_));//(pba->M_dcdm*1e9*_eV_ / (_c_ * _c_));// 1e9*_eV_ / (_c_ * _c_) convert M from GeV to kg
-      // printf("q %e aq %e t %e H %e Gamma %e M_dcdm %e rho_dcdm %e n_dcdm %e\n",q,aq,t,pba->H0,pba->Gamma_dcdm,pba->M_dcdm,rho_dcdm,n_dcdm);
-      // if(q>0.1) *f0 = pba->Gamma_dcdm*n_dcdm/(4*_PI_*H*q*q*q*pba->T_cmb*8.617343e-05*_eV_to_invMpc_*pba->T_cmb*8.617343e-05*_eV_to_invMpc_*pba->T_cmb*8.617343e-05*_eV_to_invMpc_); //issue with normalisation to be resolved
+      // printf("q %e aq %e t %e H %e Gamma %e M_dcdm %e rho_dcdm %e n_dcdm %e\n",q,aq,t,pba->H0,pba->Gamma_dcdm_wdm,pba->M_dcdm,rho_dcdm,n_dcdm);
+      // if(q>0.1) *f0 = pba->Gamma_dcdm_wdm*n_dcdm/(4*_PI_*H*q*q*q*pba->T_cmb*8.617343e-05*_eV_to_invMpc_*pba->T_cmb*8.617343e-05*_eV_to_invMpc_*pba->T_cmb*8.617343e-05*_eV_to_invMpc_); //issue with normalisation to be resolved
       // else *f0 = 0;
-      *f0 = pba->Gamma_dcdm*n_dcdm*exp(-pba->Gamma_dcdm*t)/(4*_PI_*H*pow(q*pba->T_cmb*8.617343e-05*_eV_to_invMpc_,3));
+      *f0 = pba->Gamma_dcdm_wdm*n_dcdm*exp(-pba->Gamma_dcdm_wdm*t)/(4*_PI_*H*pow(q*pba->T_cmb*8.617343e-05*_eV_to_invMpc_,3));
       // if(q<0.01) *f0 =0;
    //   *f0 *= (1-exp(-1*pow(q,2.65)/20));
       if(pba->print_ncdm_distribution == _TRUE_){
@@ -2006,13 +2006,13 @@ int background_initial_conditions(
     if (pba->has_dcdm == _TRUE_){
       /**  - f is the critical density fraction of DR. The exact solution is:
        *
-       * `f = -Omega_rad+pow(pow(Omega_rad,3./2.)+0.5*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm/pow(pba->H0,3),2./3.);`
+       * `f = -Omega_rad+pow(pow(Omega_rad,3./2.)+0.5*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm_wdm/pow(pba->H0,3),2./3.);`
        *
        * but it is not numerically stable for very small f which is always the case.
        * Instead we use the Taylor expansion of this equation, which is equivalent to
        * ignoring f(a) in the Hubble rate.
        */
-      f = 1./3.*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm/pow(pba->H0,3)/sqrt(Omega_rad);
+      f = 1./3.*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm_wdm/pow(pba->H0,3)/sqrt(Omega_rad);
       pvecback_integration[pba->index_bi_rho_dr] = f*pba->H0*pba->H0/pow(a/pba->a_today,4);
     }
     else{
@@ -2301,13 +2301,13 @@ int background_derivs(
   if (pba->has_dcdm == _TRUE_){
     /** - compute dcdm density \f$ \rho' = -3aH \rho - a \Gamma \rho \f$*/
     dy[pba->index_bi_rho_dcdm] = -3.*y[pba->index_bi_a]*pvecback[pba->index_bg_H]*y[pba->index_bi_rho_dcdm]-
-      y[pba->index_bi_a]*pba->Gamma_dcdm*y[pba->index_bi_rho_dcdm];
+      y[pba->index_bi_a]*pba->Gamma_dcdm_wdm*y[pba->index_bi_rho_dcdm];
   }
 
   if ((pba->has_dcdm == _TRUE_) && (pba->has_dr == _TRUE_)){
     /** - Compute dr density \f$ \rho' = -4aH \rho - a \Gamma \rho \f$ */
     dy[pba->index_bi_rho_dr] = -4.*y[pba->index_bi_a]*pvecback[pba->index_bg_H]*y[pba->index_bi_rho_dr]+
-      y[pba->index_bi_a]*pba->Gamma_dcdm*y[pba->index_bi_rho_dcdm];
+      y[pba->index_bi_a]*pba->Gamma_dcdm_wdm*y[pba->index_bi_rho_dcdm];
   }
 
   if (pba->has_fld == _TRUE_) {

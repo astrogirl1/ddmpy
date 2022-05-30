@@ -983,7 +983,7 @@ cdef class Class:
         return self.ba.Omega0_b+self.ba.Omega0_cdm+self.ba.Omega0_ncdm_tot + self.ba.Omega0_dcdm+self.ba.Omega0_wdm
 
     def tau_gyr(self):
-        return 1./((self.ba.Gamma_dcdm*2.99792e5)*1.02e-3)
+        return 1./((self.ba.Gamma_dcdm_wdm*2.99792e5)*1.02e-3)
 
     def omega_ini_dcdm(self):
         return self.ba.Omega_ini_dcdm * self.ba.h * self.ba.h

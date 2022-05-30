@@ -919,7 +919,7 @@ if (pba->Omega0_dcdmdr != 0.){ /* GFA */
   // printf("pba->Omega0_dcdmdr %e\n", pba->Omega0_dcdmdr);
 
     pba->has_dcdm = _TRUE_;
-     if (pba->Gamma_dcdm != 0.) {
+     if (pba->Gamma_dcdm_exo != 0.) {
       pba->has_dr = _TRUE_;
       }
      }
@@ -927,9 +927,9 @@ if (pba->Omega0_dcdmdr != 0.){ /* GFA */
   if (pba->Omega0_dcdmdrwdm  != 0.){ /* GFA */
     // printf("pba->Omega0_dcdmdrwdm %e\n", pba->Omega0_dcdmdrwdm);
     pba->has_dcdm = _TRUE_;
-    if (pba->Gamma_dcdm != 0. && pba->m_dcdm == 0.)
+    if (pba->Gamma_dcdm_wdm != 0. && pba->m_dcdm == 0.)
       pba->has_dr = _TRUE_;
-    if (pba->Gamma_dcdm != 0. &&  pba->m_dcdm > 0.)
+    if (pba->Gamma_dcdm_wdm != 0. &&  pba->m_dcdm > 0.)
       pba->has_ncdm = _TRUE_;
   }
 
@@ -1284,7 +1284,7 @@ int background_ncdm_distribution(
       n_dcdm = rho_dcdm/(pba->M_dcdm*1e9*_eV_ / (_c_ * _c_));// 1e9*_eV_ / (_c_ * _c_) convert M from GeV to kg => n_ncdm in Mpc^-3
       qcube=pow(q*1e9*_eV_/(_h_P_/2/_PI_)/_c_*_Mpc_over_m_,3); //GeV^3 to Mpc^-3
 
-      *f0 = pba->Gamma_dcdm*n_dcdm/qcube/4/_PI_; //nb: we will divide by Hq and multiply by exp(-Gamma*tq) in background_ncdm_momenta.
+      *f0 = pba->Gamma_dcdm_wdm*n_dcdm/qcube/4/_PI_; //nb: we will divide by Hq and multiply by exp(-Gamma*tq) in background_ncdm_momenta.
 
       // if(pba->print_ncdm_distribution == _TRUE_){
       //   printf("%e %e %e %e\n",q,aq,*f0*q*q,n_dcdm);
@@ -1745,18 +1745,18 @@ int background_ncdm_momenta(
         if (pseudo_p!=NULL) *pseudo_p += pow(q2/epsilon,3)/3.0*wvec[index_q]*exp_factor;
       }
       else if(background_ncdm_distribution == _massive_daughter_){
-        if(pba->tq_table[n_ncdm][index_q]>0 && pba->tq_table[n_ncdm][index_q]*pba->Gamma_dcdm<1e-3){
+        if(pba->tq_table[n_ncdm][index_q]>0 && pba->tq_table[n_ncdm][index_q]*pba->Gamma_dcdm_wdm<1e-3){
           exp_factor =1;
         }
-        else if(pba->tq_table[n_ncdm][index_q]>0 && pba->tq_table[n_ncdm][index_q]*pba->Gamma_dcdm<10 &&  pba->tq_table[n_ncdm][index_q]*pba->Gamma_dcdm>=1e-3){
-          exp_factor = exp(-pba->Gamma_dcdm*pba->tq_table[n_ncdm][index_q]);
+        else if(pba->tq_table[n_ncdm][index_q]>0 && pba->tq_table[n_ncdm][index_q]*pba->Gamma_dcdm_wdm<10 &&  pba->tq_table[n_ncdm][index_q]*pba->Gamma_dcdm_wdm>=1e-3){
+          exp_factor = exp(-pba->Gamma_dcdm_wdm*pba->tq_table[n_ncdm][index_q]);
         }else if(t==0 || H == 0){
           exp_factor = 0;
         }else{
           exp_factor = 0;
 
         }
-        // printf("exp_factor %e G %e t %e\n",exp_factor,pba->Gamma_dcdm,pba->tq_table[n_ncdm][index_q]);
+        // printf("exp_factor %e G %e t %e\n",exp_factor,pba->Gamma_dcdm_wdm,pba->tq_table[n_ncdm][index_q]);
         if(pba->Hq_table[n_ncdm][index_q] != 0.0){
           if (n!=NULL) *n += q2*wvec[index_q]/pba->Hq_table[n_ncdm][index_q]*exp_factor;
           if (rho!=NULL) *rho += q2*epsilon*wvec[index_q]/pba->Hq_table[n_ncdm][index_q]*exp_factor;
@@ -2328,14 +2328,14 @@ int background_initial_conditions(
     if (pba->has_dcdm == _TRUE_){
       /**  - f is the critical density fraction of DR. The exact solution is:
        *
-       * `f = -Omega_rad+pow(pow(Omega_rad,3./2.)+0.5*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm/pow(pba->H0,3),2./3.);`
+       * `f = -Omega_rad+pow(pow(Omega_rad,3./2.)+0.5*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm_wdm/pow(pba->H0,3),2./3.);`
        *
        * but it is not numerically stable for very small f which is always the case.
        * Instead we use the Taylor expansion of this equation, which is equivalent to
        * ignoring f(a) in the Hubble rate.
        */
-      f = 1./3.*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm/pow(pba->H0,3)/sqrt(Omega_rad)*pba->epsilon_dcdm;
-      // printf("pba->Omega0_dcdmdrwdm %e pba->Gamma_dcdm %e pba->epsilon_dcdm %e \n",pba->Omega0_dcdmdrwdm,pba->Gamma_dcdm,pba->epsilon_dcdm);
+      f = 1./3.*pow(a/pba->a_today,6)*pvecback_integration[pba->index_bi_rho_dcdm]*pba->Gamma_dcdm_wdm/pow(pba->H0,3)/sqrt(Omega_rad)*pba->epsilon_dcdm_wdm;
+      // printf("pba->Omega0_dcdmdrwdm %e pba->Gamma_dcdm_wdm %e pba->epsilon_dcdm_wdm %e \n",pba->Omega0_dcdmdrwdm,pba->Gamma_dcdm_wdm,pba->epsilon_dcdm_wdm);
       pvecback_integration[pba->index_bi_rho_dr] = f*pba->H0*pba->H0/pow(a/pba->a_today,4);
     }
     /* GFA */
@@ -2719,14 +2719,14 @@ int background_derivs(
   if (pba->has_dcdm == _TRUE_){
     /** - compute dcdm density \f$ \rho' = -3aH \rho - a \Gamma \rho \f$*/
     dy[pba->index_bi_rho_dcdm] = -3.*y[pba->index_bi_a]*pvecback[pba->index_bg_H]*y[pba->index_bi_rho_dcdm]-
-      y[pba->index_bi_a]*pba->Gamma_dcdm*y[pba->index_bi_rho_dcdm];
+      y[pba->index_bi_a]*pba->Gamma_dcdm_exo*y[pba->index_bi_rho_dcdm];
   }
 
   if (pba->has_dr == _TRUE_){
     /** - Compute dr density \f$ \rho' = -4aH \rho - a \Gamma \rho \f$ */
     dy[pba->index_bi_rho_dr] = -4.*y[pba->index_bi_a]*pvecback[pba->index_bg_H]*y[pba->index_bi_rho_dr];
     if(pba->has_dcdm == _TRUE_)
-      dy[pba->index_bi_rho_dr] += y[pba->index_bi_a]*pba->Gamma_dcdm*y[pba->index_bi_rho_dcdm]*pba->epsilon_dcdm;
+      dy[pba->index_bi_rho_dr] += y[pba->index_bi_a]*pba->Gamma_dcdm_exo*y[pba->index_bi_rho_dcdm]*pba->epsilon_dcdm_wdm;
     if(pba->has_ncdm == _TRUE_ && pba->Gamma_neutrinos[n_ncdm] > 0){
       // dy[pba->index_bi_rho_dr] += y[pba->index_bi_a]*pba->Gamma_neutrinos*pvecback[pba->index_bg_rho_ncdm1]; //5.06e15*_Mpc_over_m_ convert from GeV to invMpc
       for(n_ncdm = 0; n_ncdm<pba->N_ncdm; n_ncdm++){

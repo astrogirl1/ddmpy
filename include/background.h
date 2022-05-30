@@ -85,14 +85,15 @@ struct background
   double Omega0_dcdmdr; /**< \f$ \Omega_{0 dcdm}+\Omega_{0 dr} \f$: decaying cold dark matter (dcdm) decaying to dark radiation (dr) */
   double Omega0_dcdmdrwdm; /**< \f$ GFA: \Omega_{0 dcdm}+\Omega_{0 dr}+\Omega_{0 wdm} \f$: decaying cold dark matter (dcdm) decaying to dark radiation (dr) and warm dark matter (wdm) */
 
-  double Gamma_dcdm; /**< \f$ \Gamma_{dcdm} \f$: decay constant for decaying cold dark matter */
+  double Gamma_dcdm_wdm; /**< \f$ \Gamma_{dcdm} \f$: decay constant for decaying cold dark matter -MD changed to consider only wdm decay*/
+  double Gamma_dcdm_exo; /**< \f$ \Gamma_{dcdm} \f$: decay constant for decaying cold dark matter -MD changed to consider only exoclass decay*/
   double * Gamma_neutrinos; /**< \f$ \Gamma_{neutrinos} \f$: list of decay constant for decaying neutrinos */
   double M_dcdm; /**< \f$ M_{dcdm} \f$: mass [GeV] of the  decaying cold dark matter */
   double m_dcdm; /**< \f$ m_{dcdm} \f$: mass [GeV] of the  daugher particle */
-  double epsilon_dcdm; /**< \f$ epsilon_{dcdm} \f$: fraction of mass energy converted to the daughter radiation */
+  double epsilon_dcdm_wdm; /**< \f$ epsilon_{dcdm} \f$: fraction of mass energy converted to the daughter radiation */
   double * PDmax_dcdm; /**< Max impulsion given to the daugher particles */
-  double Omega_ini_dcdm;    /**< \f$ \Omega_{ini,dcdm} \f$: rescaled initial value for dcdm density (see 1407.2418 for definitions) */
-  double Omega_ini_dcdm2;    /**< GFA: \f$ \Omega_{ini,dcdm2} \f$: rescaled initial value for dcdm density (two-body decay) */
+  double Omega_ini_dcdm;    /**< \f$ \Omega_{ini,dcdm} \f$: rescaled initial value for dcdm density EXOCLASS (see 1407.2418 for definitions) */
+  double Omega_ini_dcdm2;    /**< GFA: \f$ \Omega_{ini,dcdm2} \f$: rescaled initial value for dcdm density WDM (POULIN)(two-body decay) */
   int massive_daugther_is_radiation; /** for debugging massive_daughter */     /** 0: no; 1: yes in background; 2: yes in background & perts */
   double Omega0_scf;        /**< \f$ \Omega_{0 scf} \f$: scalar field */
   short attractor_ic_scf;   /**< whether the scalar field has attractor initial conditions */

@@ -1786,7 +1786,7 @@ int thermodynamics_DM_decay_energy_injection(
                ppr->error_message);
      rho_dcdm = pvecback[pba->index_bg_rho_dcdm]*pow(_Mpc_over_m_,2)*3/8./_PI_/_G_*_c_*_c_; /* energy density in J/m^3 */
      /* If uncommented, these lines allow to check approximation when computing the dcdm density with analytical results. Works very well until Omega_lambda dominates, then ~10% difference. */
-    //  result_integrale = exp(-pba->Gamma_dcdm*2*((pba->Omega0_b+pba->Omega0_cdm)*pow(pba->Omega0_g+(pba->Omega0_b+pba->Omega0_cdm)/(1+z),0.5)
+    //  result_integrale = exp(-pba->Gamma_dcdm_exo*2*((pba->Omega0_b+pba->Omega0_cdm)*pow(pba->Omega0_g+(pba->Omega0_b+pba->Omega0_cdm)/(1+z),0.5)
     //  +2*pow(pba->Omega0_g,1.5)*(1+z)-2*pba->Omega0_g*pow((1+z)*(pba->Omega0_g*(1+z)+(pba->Omega0_b+pba->Omega0_cdm)),0.5))/(3*pow((pba->Omega0_b+pba->Omega0_cdm),2)*(1+z)*pba->H0));
     //   rho_dcdm_approchee = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*(pba->Omega_ini_dcdm)*_c_*_c_*result_integrale*pow(1+z,3);
     //   fprintf(stdout, "z = %e vrai = %e  approchee = %e relativ diff = %e\n",z,rho_dcdm, rho_dcdm_approchee,(rho_dcdm-rho_dcdm_approchee)/rho_dcdm_approchee);
@@ -1808,7 +1808,7 @@ int thermodynamics_DM_decay_energy_injection(
                                  pvecback),
                pba->error_message,
                ppr->error_message);
-    decay_factor = exp(-pba->Gamma_dcdm*pvecback[pba->index_bg_time]);
+    decay_factor = exp(-pba->Gamma_dcdm_exo*pvecback[pba->index_bg_time]);
     }
     // fprintf(stdout, "decay factor %e\n",decay_factor);
     rho_cdm_today = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*(pba->Omega0_cdm)*_c_*_c_; /* energy density in J/m^3 */
@@ -1816,8 +1816,8 @@ int thermodynamics_DM_decay_energy_injection(
   }
 
 
-  *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm*_c_/_Mpc_over_m_);
-  // *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm*); //to check with different units for Gamma (GeV as defined for DM_mass)
+  *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_exo*_c_/_Mpc_over_m_);
+  // *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_exo*); //to check with different units for Gamma (GeV as defined for DM_mass)
   // fprintf(stdout, "*energy_rate %e\n",*energy_rate );
   free(pvecback);
 
