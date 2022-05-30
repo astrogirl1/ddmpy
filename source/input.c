@@ -825,9 +825,14 @@ int input_read_parameters(
 
      /* Convert to Mpc */
     if (flag1 == _TRUE_)
-      pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
+      // pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
+      pba->Gamma_dcdm = param1*(1.e3 / _c_);
+      pba->tau_dcdm_exo = 1/(param1*1.02e-3)*(1e9*365*24*3600); //convert to sec.
+    // fprintf(stdout, "you have chosen Gamma = %e km/s/Mpc, tau = %e s \n",pba->Gamma_dcdm/(1.e3 / _c_),pba->tau_dcdm);
+      
     if (flag2 == _TRUE_)
       pba->Gamma_dcdm_exo = pow(10.,param2)*(1.e3 / _c_);
+      pba->tau_dcdm_exo = 1/(pba->Gamma_dcdm_exo*1.02e-3)*(1e9*365*24*3600); //convert to sec.
 
     // pba->epsilon_dcdm_wdm = 1;
 
@@ -1674,11 +1679,11 @@ int input_read_parameters(
   //   class_read_double("z_start_asymmetric_planck_16",pth->z_start_asymmetric_planck_16);
   // }
 
-  /** - energy injection parameters from CDM annihilation/decay */
+  /** - energy injection parameters from CDM annihilation_wdm/decay */
 
-  class_read_double("annihilation",pth->annihilation);
+  class_read_double("annihilation_wdm",pth->annihilation_wdm);
 
-  if (pth->annihilation > 0.) {
+  if (pth->annihilation_wdm > 0.) {
 
     class_read_double("annihilation_variation",pth->annihilation_variation);
     class_read_double("annihilation_z",pth->annihilation_z);
@@ -1710,7 +1715,7 @@ int input_read_parameters(
     }
   }
 
-  class_read_double("decay",pth->decay);
+  class_read_double("decay_wdm",pth->decay_wdm);
 
   class_call(parser_read_string(pfc,
                                 "compute damping scale",
@@ -3490,8 +3495,8 @@ int input_default_params(
   pth->binned_reio_xe=NULL;
   pth->binned_reio_step_sharpness = 0.3;
 
-  pth->annihilation = 0.;
-  pth->decay = 0.;
+  pth->annihilation_wdm = 0.;
+  pth->decay_wdm = 0.;
 
   pth->annihilation_variation = 0.;
   pth->annihilation_z = 1000.;

@@ -3481,7 +3481,7 @@ int input_default_params(
   pth->binned_reio_step_sharpness = 0.3;
 
   pth->annihilation = 0.;
-  pth->decay = 0.;
+  pth->_wdm = 0.;
 
   pth->annihilation_variation = 0.;
   pth->annihilation_z = 1000.;

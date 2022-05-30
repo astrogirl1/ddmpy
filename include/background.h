@@ -84,7 +84,7 @@ struct background
 
   double Omega0_dcdmdr; /**< \f$ \Omega_{0 dcdm}+\Omega_{0 dr} \f$: decaying cold dark matter (dcdm) decaying to dark radiation (dr) */
   double Omega0_dcdmdrwdm; /**< \f$ GFA: \Omega_{0 dcdm}+\Omega_{0 dr}+\Omega_{0 wdm} \f$: decaying cold dark matter (dcdm) decaying to dark radiation (dr) and warm dark matter (wdm) */
-
+  double tau_dcdm_exo; /* tau for exo*/
   double Gamma_dcdm_wdm; /**< \f$ \Gamma_{dcdm} \f$: decay constant for decaying cold dark matter -MD changed to consider only wdm decay*/
   double Gamma_dcdm_exo; /**< \f$ \Gamma_{dcdm} \f$: decay constant for decaying cold dark matter -MD changed to consider only exoclass decay*/
   double * Gamma_neutrinos; /**< \f$ \Gamma_{neutrinos} \f$: list of decay constant for decaying neutrinos */
