@@ -121,7 +121,7 @@ struct thermo
   short compute_damping_scale; /**< do we want to compute the simplest analytic approximation to the photon damping (or diffusion) scale? */
 
   double Lambda_over_theoritical_Lambda; /**< ratio of A2s1s transition with respect to theoritical value (Labzowsky et al 2005) */
-  double decay_wdm;
+  double decay;
   /** parameters for reio_camb */
 
   double reionization_width; /**< width of H reionization */
@@ -489,7 +489,7 @@ struct recombination {
   double annihilation; /**< parameter describing CDM annihilation (f <sigma*v> / m_cdm, see e.g. 0905.0003) */
   double annihilation_boost_factor;/**< alternative parameterization to annihilation parameter, describes the boost factor to annihilation cross section */
   double annihilation_m_DM; /**< in case of alternative parameterization to annihilation parameter, describes the mass of the dark matter */
-  double decay_wdm;
+  double decay;
   double photon_energy; /*MD fraction of energy passed onto photon in SWIMP decay*/
 
   short has_on_the_spot; /**< flag to specify if we want to use the on-the-spot approximation **/

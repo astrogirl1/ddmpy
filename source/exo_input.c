@@ -3498,7 +3498,7 @@ if(pth->PBH_evaporating_mass > 0.){
     pop->write_primordial = _TRUE_;
 
   }
-  // fprintf(stdout, "omega_b %e omega_cdm %e As %e n_s %e z_reio %e decay %e\n", pba->Omega0_b*pba->h*pba->h , pba->Omega0_cdm*pba->h*pba->h ,ppm->A_s,ppm->n_s,pth->z_reio, pth->decay_wdm );
+  // fprintf(stdout, "omega_b %e omega_cdm %e As %e n_s %e z_reio %e decay %e\n", pba->Omega0_b*pba->h*pba->h , pba->Omega0_cdm*pba->h*pba->h ,ppm->A_s,ppm->n_s,pth->z_reio, pth->decay );
 
   /** - (i.5) special steps if we want Halofit with wa_fld non-zero:
         so-called "Pk_equal method" of 0810.0190 and 1601.07230 */

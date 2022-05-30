@@ -7586,7 +7586,7 @@ int perturb_derivs(double tau,
   /* for use with curvature */
   double cotKgen, sqrt_absK;
   double s2_squared, ssqrt3;
-  double decay_wdm, metric_eta_prime; /* GFA */
+  double decay, metric_eta_prime; /* GFA */
 
   /* for use with dcdm and dr */
   double f_dr, fprime_dr, M,a2_M_Gamma;
@@ -8190,7 +8190,7 @@ int perturb_derivs(double tau,
 //          }
 
           gamma = pba->Gamma_dcdm_wdm;
-          decay_wdm =a*gamma*ratio_rho; /* GFA*/
+          decay =a*gamma*ratio_rho; /* GFA*/
           eps = pba->epsilon_dcdm_wdm;
           H = pvecback[pba->index_bg_H];
           }

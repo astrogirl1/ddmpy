@@ -57,6 +57,7 @@ cdef extern from "class.h":
         double Omega_ini_dcdm
         double Gamma_dcdm_wdm
         double Gamma_dcdm_exo
+        double tau_dcdm_exo
         double rho0_wdm_over_rho0_m
         double Omega0_ncdm_tot
         double Omega0_lambda

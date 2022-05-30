@@ -49,7 +49,7 @@ typedef struct {
   
    short has_on_the_spot; /** do we want to use the on-the-spot approximation? */
 
-   double decay_wdm; /** parameter descibing CDM decay (f/tau, see e.g. 1109.6322)*/
+   double decay; /** parameter descibing CDM decay (f/tau, see e.g. 1109.6322)*/
 
    double annihilation_variation; /** if this parameter is non-zero,
 				     the function F(z)=(f <sigma*v> /

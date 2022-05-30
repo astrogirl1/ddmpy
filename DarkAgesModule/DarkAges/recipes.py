@@ -314,7 +314,7 @@ def loading_from_specfiles(fnames, transfer_functions, mass, photon_energy, logE
 			if fname == 'Dirac_electron' or fname == 'dirac_electron':
 				spectra[:,:,idx] = np.array([2.,0.,0.]).reshape(3,1)
 			elif fname == 'Dirac_photon' or fname == 'dirac_photon':
-				spectra[:,:,idx] = np.array([0.,2.,0.]).reshape(3,1)
+				spectra[:,:,idx] = np.array([0.,1.,0.]).reshape(3,1)
 			else:
 				raise DarkAgesError('I could not interpret the spectrum-input >>{0}<< in combination with dirac-like injection spectra.'.format(fname))
 		tot_spec = np.tensordot(spectra, branchings, axes=(2,0))

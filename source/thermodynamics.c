@@ -4224,7 +4224,7 @@ int thermodynamics_recombination_with_hyrec(
   param.nz = (long) floor(2+log((1.+param.zstart)/(1.+param.zend))/param.dlna);
   param.annihilation = pth->annihilation;
   param.has_on_the_spot = pth->has_on_the_spot;
-  param.decay_wdm = pth->decay_wdm;
+  param.decay = pth->decay;
   param.annihilation_variation = pth->annihilation_variation;
   param.annihilation_z = pth->annihilation_z;
   param.annihilation_zmax = pth->annihilation_zmax;
@@ -4345,7 +4345,7 @@ int thermodynamics_recombination_with_hyrec(
   preco->annihilation_z = pth->annihilation_z;
   preco->annihilation_zmax = pth->annihilation_zmax;
   preco->annihilation_zmin = pth->annihilation_zmin;
-  preco->decay_wdm = pth->decay_wdm;
+  preco->decay = pth->decay;
   preco->annihilation_f_halo = pth->annihilation_f_halo;
   preco->annihilation_z_halo = pth->annihilation_z_halo;
   pth->n_e=preco->Nnow;
@@ -4579,7 +4579,7 @@ int thermodynamics_recombination_with_recfast(
   preco->annihilation_z = pth->annihilation_z;
   preco->annihilation_zmax = pth->annihilation_zmax;
   preco->annihilation_zmin = pth->annihilation_zmin;
-  preco->decay_wdm = pth->decay_wdm;
+  preco->decay = pth->decay;
   preco->annihilation_f_halo = pth->annihilation_f_halo;
   preco->annihilation_z_halo = pth->annihilation_z_halo;
 

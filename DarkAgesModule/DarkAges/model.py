@@ -29,6 +29,7 @@ from .transfer import transfer
 from .common import f_function
 from .__init__ import DarkAgesError, get_logEnergies, get_redshift, print_info
 import numpy as np
+import sys
 
 class model(object):
 	u"""
