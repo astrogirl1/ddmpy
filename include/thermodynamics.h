@@ -231,6 +231,7 @@ double * reio_inter_xe; /**< discrete \f$ X_e(z)\f$ values */
   double annihilation; /** parameter describing CDM annihilation (f <sigma*v> / m_cdm, see e.g. 0905.0003) */
   double annihilation_cross_section;
   double DM_mass;
+  double photon_energy;
   double annihilation_variation; /** if this parameter is non-zero,
 				     the function F(z)=(f <sigma*v> /
 				     m_cdm)(z) will be a parabola in
@@ -489,6 +490,7 @@ struct recombination {
   double annihilation_boost_factor;/**< alternative parameterization to annihilation parameter, describes the boost factor to annihilation cross section */
   double annihilation_m_DM; /**< in case of alternative parameterization to annihilation parameter, describes the mass of the dark matter */
   double decay;
+  double photon_energy; /*MD fraction of energy passed onto photon in SWIMP decay*/
 
   short has_on_the_spot; /**< flag to specify if we want to use the on-the-spot approximation **/
   double m_grav;

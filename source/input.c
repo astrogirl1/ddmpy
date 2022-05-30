@@ -832,6 +832,14 @@ int input_read_parameters(
     pba->epsilon_dcdm = 1;
 
   }
+    /*Read photon_energy*/
+  class_call(parser_read_double(pfc,"photon_energy",&param1,&flag1,errmsg),
+             errmsg,
+             errmsg);
+  if(flag1=_TRUE_){
+    pth->photon_energy = param1;
+    // printf("This reads photon_energy %g \n", pth->photon_energy);
+  }
 
   // GFA: epsilon_dcdm parameter is read here because it is needed later for getting Gamma from log10(Gamma*epsilon)
 
@@ -3436,6 +3444,7 @@ int input_default_params(
   pba->deg_ncdm = NULL;
   pba->ncdm_psd_parameters = NULL;
   pba->ncdm_psd_files = NULL;
+  pth->photon_energy = 0;
 
   pba->Omega0_scf = 0.; /* Scalar field defaults */
   pba->attractor_ic_scf = _TRUE_;

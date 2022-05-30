@@ -4349,6 +4349,7 @@ int thermodynamics_recombination_with_hyrec(
   preco->annihilation_f_halo = pth->annihilation_f_halo;
   preco->annihilation_z_halo = pth->annihilation_z_halo;
   pth->n_e=preco->Nnow;
+  preco->photon_energy = pth->photon_energy;
 
   /** - allocate memory for thermodynamics interpolation tables (size known in advance) and fill it */
 
