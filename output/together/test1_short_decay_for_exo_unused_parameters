@@ -1,0 +1,16 @@
+# List of input/precision parameters passed
+# but not used (just for info)
+#
+; omega_ini_dcdm2 = 0.1194
+; Gamma_dcdm_wdm = 17.77
+; epsilon_dcdm_wdm = 0.0069
+; recombination = HyRec
+; N_ncdm = 2
+; background_ncdm_distribution = 0, 1
+; m_ncdm = 0.06, 0
+; N_ur = 2.0328
+; ncdm_fluid_approximation = 2
+; ncdm_fluid_trigger_tau_over_tau_k = 25
+; massive_daughter_perturbations = yes
+; dark_radiation_perturbations = yes
+write warnings = yes

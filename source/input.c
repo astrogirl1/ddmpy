@@ -811,8 +811,8 @@ int input_read_parameters(
       pba->Omega_ini_dcdm = param2/pba->h/pba->h;
     if (flag3 == _TRUE_)
       pba->Omega_ini_dcdm = (param3/(1.-param3))*pba->Omega0_cdm;
-  }
-    /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
+
+      /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
     class_call(parser_read_double(pfc,"Gamma_dcdm_exo",&param1,&flag1,errmsg),
                errmsg,
                errmsg);
@@ -836,6 +836,7 @@ int input_read_parameters(
       pba->tau_dcdm_exo = 1/(pba->Gamma_dcdm_exo*1.02e-3)*(1e9*365*24*3600); //convert to sec.
 
     // pba->epsilon_dcdm_wdm = 1;
+    /*Read photon_energy*/
     class_call(parser_read_double(pfc,"photon_energy",&param1,&flag1,errmsg),
              errmsg,
              errmsg);
@@ -843,7 +844,11 @@ int input_read_parameters(
       pth->photon_energy = param1;
       // printf("This reads photon_energy %g \n", pth->photon_energy);
     }
-    /*Read photon_energy*/
+   
+  
+  }
+    
+    
 
   // GFA: epsilon_dcdm_wdm parameter is read here because it is needed later for getting Gamma from log10(Gamma*epsilon)
 
@@ -4267,7 +4272,7 @@ int input_default_precision ( struct precision * ppr ) {
    * - parameters related to the background
    */
 
-  ppr->a_ini_over_a_today_default = 1.e-14; /*VP: testing: change the initial time, seems to bug when changing from the ini file*/
+  ppr->a_ini_over_a_today_default = 1.e-12; /*VP: testing: change the initial time, seems to bug when changing from the ini file*/
   ppr->back_integration_stepsize = 7.e-3;
   ppr->tol_background_integration = 1.e-2;
 
