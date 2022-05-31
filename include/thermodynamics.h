@@ -629,9 +629,9 @@ struct reionization {
 
   /* parameters used by planck 16 asymmetric parametrization */
 
-  // int index_z_end_asymmetric_planck_16;
-  // int index_z_start_asymmetric_planck_16;
-  // int index_alpha_asymmetric_planck_16;
+  int index_z_end_asymmetric_planck_16;
+  int index_z_start_asymmetric_planck_16;
+  int index_alpha_asymmetric_planck_16;
 
 
   /* parameters used by all schemes */

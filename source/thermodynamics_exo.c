@@ -407,8 +407,8 @@ int thermodynamics_init(
              pth->error_message,
              "stop to avoid division by zero");
   // class_test(pth->alpha_asymmetric_planck_16<1.5 || pth->alpha_asymmetric_planck_16>50 ,pth->error_message,
-	//      "alpha_asymmetric_planck_16 out of range [1.5,50]: rejected to avoid memory leakage.");
-  // /** - assign values to all indices in the structures with thermodynamics_indices()*/
+	    //  "alpha_asymmetric_planck_16 out of range [1.5,50]: rejected to avoid memory leakage.");
+  /** - assign values to all indices in the structures with thermodynamics_indices()*/
 
   class_call(thermodynamics_indices(pth,preco,preio),
              pth->error_message,
@@ -861,14 +861,14 @@ int thermodynamics_init(
       printf("    corresponding to conformal time = %f Mpc\n",tau_reio);
       // printf("duration of reionization = %e, with z_beg = %e, z_mid = %e, z_end = %e\n",pth->duration_of_reionization,pth->z_10_percent,pth->z_50_percent, pth->z_99_percent);
     }
-    if((pth->reio_parametrization == reio_douspis_et_al) || (pth->reio_parametrization == reio_asymmetric_planck_16)){
-      printf(" -> reionization with optical depth = %f\n",pth->tau_reio);
-      class_call(background_tau_of_z(pba,pth->z_reio,&tau_reio),
-               pba->error_message,
-               pth->error_message);
-      printf("    corresponding to conformal time = %f Mpc\n",tau_reio);
-      // printf("duration of reionization = %e, with z_beg = %e, z_mid = %e, z_end = %e\n",pth->duration_of_reionization,pth->z_10_percent,pth->z_50_percent, pth->z_99_percent);
-    }
+    // if((pth->reio_parametrization == reio_douspis_et_al) || (pth->reio_parametrization == reio_asymmetric_planck_16)){
+    //   printf(" -> reionization with optical depth = %f\n",pth->tau_reio);
+    //   class_call(background_tau_of_z(pba,pth->z_reio,&tau_reio),
+    //            pba->error_message,
+    //            pth->error_message);
+    //   printf("    corresponding to conformal time = %f Mpc\n",tau_reio);
+    //   // printf("duration of reionization = %e, with z_beg = %e, z_mid = %e, z_end = %e\n",pth->duration_of_reionization,pth->z_10_percent,pth->z_50_percent, pth->z_99_percent);
+    // }
     if (pth->reio_parametrization == reio_bins_tanh) {
       printf(" -> binned reionization gives optical depth = %f\n",pth->tau_reio);
     }
@@ -1121,29 +1121,29 @@ int thermodynamics_indices(
 
   }
 
-  if (pth->reio_parametrization == reio_asymmetric_planck_16){
+  // if (pth->reio_parametrization == reio_asymmetric_planck_16){
 
-    preio->index_reio_xe_before = index;
-    index++;
-    preio->index_reio_xe_after = index;
-    index++;
-    preio->index_alpha_asymmetric_planck_16 = index;
-    index++;
-    preio->index_z_end_asymmetric_planck_16= index;
-    index++;
-    preio->index_z_start_asymmetric_planck_16= index;
-    index++;
-    preio->index_helium_fullreio_fraction = index;
-    index++;
-    preio->index_helium_fullreio_redshift = index;
-    index++;
-    preio->index_helium_fullreio_width = index;
-    index++;
+  //   preio->index_reio_xe_before = index;
+  //   index++;
+  //   preio->index_reio_xe_after = index;
+  //   index++;
+  //   // preio->index_alpha_asymmetric_planck_16 = index;
+  //   // index++;
+  //   preio->index_z_end_asymmetric_planck_16= index;
+  //   index++;
+  //   preio->index_z_start_asymmetric_planck_16= index;
+  //   index++;
+  //   preio->index_helium_fullreio_fraction = index;
+  //   index++;
+  //   preio->index_helium_fullreio_redshift = index;
+  //   index++;
+  //   preio->index_helium_fullreio_width = index;
+  //   index++;
 
 
-    preio->reio_num_params = index;
+  //   preio->reio_num_params = index;
 
-  }
+  // }
 
   if (pth->reio_parametrization == reio_stars_sfr_source_term){
 
@@ -1810,12 +1810,14 @@ int thermodynamics_DM_decay_energy_injection(
                ppr->error_message);
     decay_factor = exp(-pba->Gamma_dcdm_exo*pvecback[pba->index_bg_time]);
     }
+    // fprintf(stdout, "decay factor %e\n",decay_factor);
     rho_cdm_today = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*(pba->Omega0_cdm)*_c_*_c_; /* energy density in J/m^3 */
     rho_dcdm = rho_cdm_today*pow((1+z),3)*decay_factor; // This trick avoid mixing gravitational and electromagnetic impacts of the decay on the CMB power spectra.
   }
 
 
   *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_exo*_c_/_Mpc_over_m_);
+  // *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_exo*); //to check with different units for Gamma (GeV as defined for DM_mass)
   // fprintf(stdout, "*energy_rate %e\n",*energy_rate );
   free(pvecback);
 
@@ -2529,76 +2531,76 @@ int thermodynamics_reionization_function(
     return _SUCCESS_;
 
   }
-  if(pth->reio_parametrization == reio_asymmetric_planck_16){
-    if(z > preio->reionization_parameters[preio->index_reio_start]) {
-      *xe = preio->reionization_parameters[preio->index_reio_xe_before];
+  // if(pth->reio_parametrization == reio_asymmetric_planck_16){
+  //   if(z > preio->reionization_parameters[preio->index_reio_start]) {
+  //     *xe = preio->reionization_parameters[preio->index_reio_xe_before];
 
-    }
+  //   }
 
-    else {
+  //   else {
 
-    if(z < preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]){
-
-
-    *xe =  (preio->reionization_parameters[preio->index_reio_xe_after]
-             -preio->reionization_parameters[preio->index_reio_xe_before]);
-
-    }
-    else{
-      factor = pow((preio->reionization_parameters[preio->index_reio_start]-z)/(preio->reionization_parameters[preio->index_reio_start]-preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]),preio->reionization_parameters[preio->index_alpha_asymmetric_planck_16]);
-      *xe = (preio->reionization_parameters[preio->index_reio_xe_after]
-               -preio->reionization_parameters[preio->index_reio_xe_before])*
-               factor;
-      *xe = MAX(preio->reionization_parameters[preio->index_reio_xe_before],*xe);
-
-    }
-
-    if(*xe > 0.1*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_10_percent == 0){
-      pth->z_10_percent = z;
-      // fprintf(stdout, "pth->z_10_percent %e\n", pth->z_10_percent);
-    }
-    if(*xe > 0.50*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_50_percent == 0 ){
-      pth->z_50_percent = z;
-      // fprintf(stdout, "pth->z_50_percent %e\n", pth->z_50_percent);
-
-    }
-    if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent == 0){
-    // if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent > 200){
-      pth->z_99_percent = z;
-      // class_test(pth->z_99_percent<=6,
-      //            pth->error_message,
-      //            "z_99_percent < 6, we reject the point");
+  //   if(z < preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]){
 
 
-    }
-    if(pth->z_99_percent != 0 && pth->z_10_percent != 0 && pth->duration_of_reionization == 0){
-      pth->duration_of_reionization = pth->z_10_percent  - pth->z_99_percent;
-      if(pth->duration_of_reionization < 0) pth->duration_of_reionization ==0;
-      // class_test(pth->duration_of_reionization<1,
-      //            pth->error_message,
-      //            "duration_of_reionization < 1, we reject the point");
-      // fprintf(stdout, "pth->duration_of_reionization %e v2 %e \n", pth->duration_of_reionization,pth->z_10_percent  -preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]);
+  //   *xe =  (preio->reionization_parameters[preio->index_reio_xe_after]
+  //            -preio->reionization_parameters[preio->index_reio_xe_before]);
 
-    }
-    // fprintf(stdout, "z %e xe %e factor %e\n",z,*xe,factor);
+  //   }
+  //   // else{
+  //   //   factor = pow((preio->reionization_parameters[preio->index_reio_start]-z)/(preio->reionization_parameters[preio->index_reio_start]-preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]),preio->reionization_parameters[preio->index_alpha_asymmetric_planck_16]);
+  //   //   *xe = (preio->reionization_parameters[preio->index_reio_xe_after]
+  //   //            -preio->reionization_parameters[preio->index_reio_xe_before])*
+  //   //            factor;
+  //   //   *xe = MAX(preio->reionization_parameters[preio->index_reio_xe_before],*xe);
 
-    /** -> case z < z_reio_start: helium contribution (tanh of simpler argument) */
-    /********Helium reionization is taken into account with a camb-like parametrization***********/
-      argument = (preio->reionization_parameters[preio->index_helium_fullreio_redshift] - z)
-        /preio->reionization_parameters[preio->index_helium_fullreio_width];
-      /* no possible segmentation fault: checked to be non-zero in thermodynamics_reionization() */
-      *xe += preio->reionization_parameters[preio->index_helium_fullreio_fraction]
-        * (tanh(argument)+1.)/2.;
-    // fprintf(stdout, "z %e x_e %e xe_before %e factor %elambda %e zp %e qp %e\n", z,*xe,preio->reionization_parameters[preio->index_reio_xe_before],factor,preio->reionization_parameters[preio->index_lambda_douspis_et_al],preio->reionization_parameters[preio->index_zp_douspis_et_al],preio->reionization_parameters[preio->index_Qp_douspis_et_al]);
+  //   // }
+
+  //   if(*xe > 0.1*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_10_percent == 0){
+  //     pth->z_10_percent = z;
+  //     // fprintf(stdout, "pth->z_10_percent %e\n", pth->z_10_percent);
+  //   }
+  //   if(*xe > 0.50*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_50_percent == 0 ){
+  //     pth->z_50_percent = z;
+  //     // fprintf(stdout, "pth->z_50_percent %e\n", pth->z_50_percent);
+
+  //   }
+  //   if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent == 0){
+  //   // if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent > 200){
+  //     pth->z_99_percent = z;
+  //     // class_test(pth->z_99_percent<=6,
+  //     //            pth->error_message,
+  //     //            "z_99_percent < 6, we reject the point");
+
+
+  //   }
+  //   if(pth->z_99_percent != 0 && pth->z_10_percent != 0 && pth->duration_of_reionization == 0){
+  //     pth->duration_of_reionization = pth->z_10_percent  - pth->z_99_percent;
+  //     if(pth->duration_of_reionization < 0) pth->duration_of_reionization ==0;
+  //     // class_test(pth->duration_of_reionization<1,
+  //     //            pth->error_message,
+  //     //            "duration_of_reionization < 1, we reject the point");
+  //     // fprintf(stdout, "pth->duration_of_reionization %e v2 %e \n", pth->duration_of_reionization,pth->z_10_percent  -preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]);
+
+  //   }
+  //   // fprintf(stdout, "z %e xe %e factor %e\n",z,*xe,factor);
+
+  //   /** -> case z < z_reio_start: helium contribution (tanh of simpler argument) */
+  //   /********Helium reionization is taken into account with a camb-like parametrization***********/
+  //     argument = (preio->reionization_parameters[preio->index_helium_fullreio_redshift] - z)
+  //       /preio->reionization_parameters[preio->index_helium_fullreio_width];
+  //     /* no possible segmentation fault: checked to be non-zero in thermodynamics_reionization() */
+  //     *xe += preio->reionization_parameters[preio->index_helium_fullreio_fraction]
+  //       * (tanh(argument)+1.)/2.;
+  //   // fprintf(stdout, "z %e x_e %e xe_before %e factor %elambda %e zp %e qp %e\n", z,*xe,preio->reionization_parameters[preio->index_reio_xe_before],factor,preio->reionization_parameters[preio->index_lambda_douspis_et_al],preio->reionization_parameters[preio->index_zp_douspis_et_al],preio->reionization_parameters[preio->index_Qp_douspis_et_al]);
 
 
 
-    }
+  //   }
 
 
-    return _SUCCESS_;
+  //   return _SUCCESS_;
 
-  }
+  // }
   if(pth->reio_parametrization == reio_stars_sfr_source_term){
     if(z > preio->reionization_parameters[preio->index_reio_start]) {
       *xe = preio->reionization_parameters[preio->index_reio_xe_before];
@@ -3304,25 +3306,25 @@ int thermodynamics_reionization(
   //              "stop to avoid division by zero");
   //   //  preio->reionization_parameters[preio->index_reio_start] = ppr->reionization_z_start_max;
 
-    //  class_test(preio->reionization_parameters[preio->index_reio_start] > ppr->reionization_z_start_max,
-    //             pth->error_message,
-    //             "starting redshift for reionization > reionization_z_start_max = %e\n",ppr->reionization_z_start_max);
+  //    class_test(preio->reionization_parameters[preio->index_reio_start] > ppr->reionization_z_start_max,
+  //               pth->error_message,
+  //               "starting redshift for reionization > reionization_z_start_max = %e\n",ppr->reionization_z_start_max);
 
-     /* infer xe_before_reio */
-    //  class_call(thermodynamics_get_xe_before_reionization(ppr,
-    //                                                       pth,
-    //                                                       preco,
-    //                                                       preio->reionization_parameters[preio->index_reio_start],
-    //                                                       &(preio->reionization_parameters[preio->index_reio_xe_before])),
-    //             pth->error_message,
-    //             pth->error_message);
-    //  /* fill reionization table */
-    //  class_call(thermodynamics_reionization_sample(ppr,pba,pth,preco,preio,pvecback),
-    //             pth->error_message,
-    //             pth->error_message);
-    //  pth->tau_reio=preio->reionization_optical_depth;
+  //    /* infer xe_before_reio */
+  //    class_call(thermodynamics_get_xe_before_reionization(ppr,
+  //                                                         pth,
+  //                                                         preco,
+  //                                                         preio->reionization_parameters[preio->index_reio_start],
+  //                                                         &(preio->reionization_parameters[preio->index_reio_xe_before])),
+  //               pth->error_message,
+  //               pth->error_message);
+  //    /* fill reionization table */
+  //    class_call(thermodynamics_reionization_sample(ppr,pba,pth,preco,preio,pvecback),
+  //               pth->error_message,
+  //               pth->error_message);
+  //    pth->tau_reio=preio->reionization_optical_depth;
 
-    //  return _SUCCESS_;
+  //    return _SUCCESS_;
 
   // }
 
@@ -4347,6 +4349,7 @@ int thermodynamics_recombination_with_hyrec(
   preco->annihilation_f_halo = pth->annihilation_f_halo;
   preco->annihilation_z_halo = pth->annihilation_z_halo;
   pth->n_e=preco->Nnow;
+  preco->photon_energy = pth->photon_energy;
 
   /** - allocate memory for thermodynamics interpolation tables (size known in advance) and fill it */
 
@@ -4440,102 +4443,6 @@ int thermodynamics_recombination_with_hyrec(
 
   return _SUCCESS_;
 }
-int fill_recombination_structure(struct precision * ppr,
-                                 struct background * pba,
-                                 struct thermo * pth,
-                                 struct recombination * preco){
-
-   double mu_H,Lalpha,Lalpha_He,DeltaB,DeltaB_He;
-
-  /** - allocate memory for thermodynamics interpolation tables (size known in advance) */
-  preco->rt_size = ppr->recfast_Nz0;
-  class_alloc(preco->recombination_table,preco->re_size*preco->rt_size*sizeof(double),pth->error_message);
-
-
-  /** - read a few precision/cosmological parameters */
-
-
-  /* preco->H0 is H0 in inverse seconds (while pba->H0 is [H0/c] in inverse Mpcs) */
-  preco->H0 = pba->H0 * _c_ / _Mpc_over_m_;
-
-  /* Yp */
-  preco->YHe = pth->YHe;
-
-  /* Tnow */
-  preco->Tnow = pba->T_cmb;
-
-  /* H_frac */
-  preco->H_frac = ppr->recfast_H_frac;
-
-  /* H fudging */
- class_test((ppr->recfast_Hswitch != _TRUE_) && (ppr->recfast_Hswitch != _FALSE_),
-            pth->error_message,
-            "RECFAST error: unknown H fudging scheme");
-  preco->fu = ppr->recfast_fudge_H;
-  if (ppr->recfast_Hswitch == _TRUE_)
-    preco->fu += ppr->recfast_delta_fudge_H;
-
-  /* He fudging */
-  class_test((ppr->recfast_Heswitch < 0) || (ppr->recfast_Heswitch > 6),
-             pth->error_message,
-             "RECFAST error: unknown He fudging scheme");
-
-  mu_H = 1./(1.-preco->YHe);
-  Lalpha = 1./_L_H_alpha_;
-  Lalpha_He = 1./_L_He_2p_;
-  DeltaB = _h_P_*_c_*(_L_H_ion_-_L_H_alpha_);
-  DeltaB_He = _h_P_*_c_*(_L_He1_ion_-_L_He_2s_);
-
-  preco->fHe = preco->YHe/(_not4_ *(1.-preco->YHe)); /* recfast 1.4 */
-  preco->Nnow = 3.*preco->H0*preco->H0*pba->Omega0_b/(8.*_PI_*_G_*mu_H*_m_H_);
-
-  /* energy injection parameters */
-  preco->annihilation = pth->annihilation;
-  preco->has_on_the_spot = pth->has_on_the_spot;
-  preco->decay_fraction = pth->decay_fraction;
-  preco->PBH_accreting_mass = pth->PBH_accreting_mass;
-  preco->PBH_ADAF_delta = pth->PBH_ADAF_delta;
-  preco->PBH_accretion_eigenvalue = pth->PBH_accretion_eigenvalue;
-  preco->PBH_relative_velocities = pth->PBH_relative_velocities;
-  preco->PBH_accretion_recipe = pth->PBH_accretion_recipe;
-  preco->energy_deposition_function = pth->energy_deposition_function;
-  preco->PBH_evaporating_mass = pth->PBH_evaporating_mass;
-  preco->PBH_fraction = pth->PBH_fraction;
-  preco->photon_energy = pth->photon_energy;
-
-  preco->PBH_table_is_initialized = pth->PBH_table_is_initialized;
-  preco->PBH_table_z = pth->PBH_table_z;
-  preco->PBH_table_mass = pth->PBH_table_mass;
-  preco->PBH_table_mass_dd = pth->PBH_table_mass_dd;
-  preco->PBH_table_F = pth->PBH_table_F;
-  preco->PBH_table_F_dd = pth->PBH_table_F_dd;
-
-  preco->energy_repart_coefficient = pth->energy_repart_coefficient;
-  preco->annihilation_f_halo = pth->annihilation_f_halo;
-  preco->annihilation_z_halo = pth->annihilation_z_halo;
-  preco->f_eff = pth->f_eff;
-
-  /* quantities related to constants defined in thermodynamics.h */
-  //n = preco->Nnow * pow((1.+z),3);
-
-  preco->CDB = DeltaB/_k_B_;
-  preco->CDB_He = DeltaB_He/_k_B_;
-  preco->CB1 = _h_P_*_c_*_L_H_ion_/_k_B_;
-  preco->CB1_He1 = _h_P_*_c_*_L_He1_ion_/_k_B_;
-  preco->CB1_He2 = _h_P_*_c_*_L_He2_ion_/_k_B_;
-  preco->CR = 2.*_PI_*(_m_e_/_h_P_)*(_k_B_/_h_P_);
-  preco->CK = pow(Lalpha,3)/(8.*_PI_);
-  preco->CK_He = pow(Lalpha_He,3)/(8.*_PI_);
-  preco->CL = _c_*_h_P_/(_k_B_*Lalpha);
-  preco->CL_He = _c_*_h_P_/(_k_B_/_L_He_2s_);
-  preco->CT = (8./3.) * (_sigma_/(_m_e_*_c_)) *
-    (8.*pow(_PI_,5)*pow(_k_B_,4)/ 15./ pow(_h_P_,3)/pow(_c_,3));
-
-  preco->Bfact = _h_P_*_c_*(_L_He_2p_-_L_He_2s_)/_k_B_;
-
-  return _SUCCESS_;
-}
-
 /**
  * Integrate thermodynamics with RECFAST.
  *
@@ -4986,9 +4893,8 @@ int thermodynamics_derivs_with_recfast(
 
 
   /* define local variables */
-
   double x,n,n_He,Trad,Tmat,x_H,x_He,Hz,dHdz,epsilon;
-  double Rup,Rdown,K,K_He,Rup_He,Rdown_He,He_Boltz;
+  double Rup,Rup_2,Rdown,K,K_He,Rup_He,Rup_He_2,Rdown_He,He_Boltz;
   double timeTh,timeH;
   double sq_0,sq_1;
 
@@ -5001,8 +4907,10 @@ int thermodynamics_derivs_with_recfast(
   struct thermodynamics_parameters_and_workspace * ptpaw;
   struct precision * ppr;
   struct background * pba;
+  struct thermo * pth;
   struct recombination * preco;
   double * pvecback;
+  int last_index_back;
 
   /* used for energy injection from dark matter */
   double C;
@@ -5011,25 +4919,40 @@ int thermodynamics_derivs_with_recfast(
 
   double tau;
   double chi_heat;
-  double chi_ion_H;
-  int last_index_back;
+  double chi_lya;
+  double chi_ionH;
+  double chi_ionHe;
+  double chi_lowE;
+  double dTdz_DM, dTdz_CMB, dTdz_adia, dTdz_stars;
+   /*used for reionization from realistic star model*/
+  double rho_sfr,stars_xe,dNion_over_dt,L_x;
 
   ptpaw = parameters_and_workspace;
   ppr = ptpaw->ppr;
   pba = ptpaw->pba;
+  pth = ptpaw->pth;
   preco = ptpaw->preco;
   pvecback = ptpaw->pvecback;
+  rho_sfr = pth->ap*pow(1+z,pth->bp)/(1+pow((1+z)/pth->cp,pth->dp))/pow(_Mpc_over_m_,3)*pow(1+z,3)*(1+tanh((pth->z_start_reio_stars-z)))/2;//add a (sharp) smoothing function.
 
-  x_H = y[0];
-  // printf("x_H %e\n",x_H);
-  x_He = y[1];
-  x = x_H + preco->fHe * x_He;
-  Tmat = y[2];
+  /* security added by Vivian Poulin to avoid bug when dealing with energy injection modifying ionisation history */
+  x_H = MIN(y[0],1.);
+  x_H = MAX(y[0],0.);
+  x_He = MIN(y[1],1.);
+  x_He = MAX(y[1],0.);
+  x = MIN(x_H + preco->fHe * x_He,1+preco->fHe);
+  x = MAX(x_H + preco->fHe * x_He,0.);
 
+  // x_H = y[0];
+  // x_He = y[1];
+  // x = x_H + preco->fHe * x_He;
+
+  Tmat = MAX(y[2],0.);
+
+  // fprintf(stderr, "input xH %e xHe %e x %e Tmat %e\n",x_H, x_He, x, Tmat );
   n = preco->Nnow * (1.+z) * (1.+z) * (1.+z);
   n_He = preco->fHe * n;
   Trad = preco->Tnow * (1.+z);
-
   class_call(background_tau_of_z(pba,
                                  z,
                                  &tau),
@@ -5045,19 +4968,33 @@ int thermodynamics_derivs_with_recfast(
              pba->error_message,
              error_message);
 
-  class_call(thermodynamics_energy_injection(ppr,pba,preco,z,&energy_rate,error_message),
-             error_message,
-             error_message);
+   if((pth->annihilation!=0 || pth->decay_fraction!=0 || pth->PBH_accreting_mass!=0 || pth->PBH_evaporating_mass != 0)){
+     preco->xe_tmp=x;
+     preco->Tm_tmp=Tmat;
 
+        if( z > 2){//sometimes problem with interpolation
+          // fprintf(stdout, "z %e,Tmat %e, x %e\n",z,Tmat,x);
+        class_call(thermodynamics_energy_injection(ppr,pba,preco,z,&energy_rate,error_message),
+                   error_message,
+                   error_message);
+        // fprintf(stdout, "energy_rate %e\n",energy_rate);
+        }
+        else energy_rate = 0;
+           preco->z_tmp=z;
+    }
+    else energy_rate=0;
+ // fprintf(stdout,"%e      %e     %e      %e      %e    \n", x,pth->chi_heat,pth->chi_lya, pth->chi_ionH,pth->chi_ionHe,pth->chi_lowE);
   /* Hz is H in inverse seconds (while pvecback returns [H0/c] in inverse Mpcs) */
   Hz=pvecback[pba->index_bg_H]* _c_ / _Mpc_over_m_;
-
+  //fprintf(stdout,"T_mat = %e\t_a_PPB_ = %e\t_b_PPB_ = %e\t_c_PPB_ = %e\t_d_PPB_ = %e\n",(double) Tmat,(double) _a_PPB_, (double) _b_PPB_, (double) _c_PPB_, (double) _d_PPB_);
   Rdown=1.e-19*_a_PPB_*pow((Tmat/1.e4),_b_PPB_)/(1.+_c_PPB_*pow((Tmat/1.e4),_d_PPB_));
+  Rup_2 = 1.e-19*_a_PPB_*pow((Trad/1.e4),_b_PPB_)/(1.+_c_PPB_*pow((Trad/1.e4),_d_PPB_)) * pow((preco->CR*Trad),1.5)*exp(-preco->CDB/Trad);
   Rup = Rdown * pow((preco->CR*Tmat),1.5)*exp(-preco->CDB/Tmat);
 
   sq_0 = sqrt(Tmat/_T_0_);
   sq_1 = sqrt(Tmat/_T_1_);
   Rdown_He = _a_VF_/(sq_0 * pow((1.+sq_0),(1.-_b_VF_)) * pow((1. + sq_1),(1. + _b_VF_)));
+  Rup_He_2 = 4.*Rdown_He*pow((preco->CR*Trad),1.5)*exp(-preco->CDB_He/Trad);
   Rup_He = 4.*Rdown_He*pow((preco->CR*Tmat),1.5)*exp(-preco->CDB_He/Tmat);
   K = preco->CK/Hz;
 
@@ -5129,45 +5066,96 @@ int thermodynamics_derivs_with_recfast(
   timeTh=(1./(preco->CT*pow(Trad,4)))*(1.+x+preco->fHe)/x;
   timeH=2./(3.*preco->H0*pow(1.+z,1.5));
 
-/************/
+  /************/
   /* hydrogen */
   /************/
 
   if (x_H > ppr->recfast_x_H0_trigger)
     dy[0] = 0.;
   else {
+    /* equations modified to take into account energy injection from dark matter */
+      chi_ionH = 0.;
+      chi_ionHe = 0.;
+      chi_lya = 0.;
+
+    if(preco->annihilation > 0 || preco->decay_fraction > 0 || preco->PBH_accreting_mass > 0 || preco->PBH_evaporating_mass > 0){
+      if (x < 1.){
+        /* coefficient as revised by Galli et al. 2013 (in fact it is an interpolation by Vivian Poulin of Table V of Galli et al. 2013) */
+        if(pth->energy_repart_coefficient==GSVI|| pth->energy_repart_coefficient ==chi_from_file){
+          class_call(thermodynamics_annihilation_coefficients_interpolate(ppr,pba,pth,x),
+                         error_message,
+                         error_message);
+          chi_ionH = pth->chi_ionH;
+          chi_ionHe = pth->chi_ionHe;
+          chi_lya = pth->chi_lya;
+
+        }
+        if(pth->energy_repart_coefficient==no_factorization){
+          class_call(thermodynamics_annihilation_coefficients_interpolate(ppr,pba,pth,z),
+                         error_message,
+                         error_message);
+          chi_ionH = pth->chi_ionH;
+          chi_ionHe = pth->chi_ionHe;
+          chi_lya = pth->chi_lya;
+          // fprintf(stdout, "%e %e %e %e %e\n",z,chi_ionH,chi_lya,pth->chi_heat,(chi_ionH+chi_ionHe+chi_lya+pth->chi_heat));
+        }
+        /* old approximation from Chen and Kamionkowski */
+        if(pth->energy_repart_coefficient==SSCK){
+          chi_ionH = (1.-x)/3.;
+          chi_lya = chi_ionH;
+          chi_ionHe=0;
+        }
+
+        chi_ionH = MIN(chi_ionH,1.);
+        chi_ionHe = MIN(chi_ionHe,1.);
+        chi_lya = MIN(chi_lya,1.);
+        chi_ionH = MAX(chi_ionH,0.);
+        chi_ionHe = MAX(chi_ionHe,0.);
+        chi_lya = MAX(chi_lya,0.);
+
+      }
+      else {
+        chi_ionH = 0.;
+        chi_ionHe = 0.;
+        chi_lya = 0.;
+      }
+      if(pth->thermodynamics_verbose>10){
+        fprintf(stdout, "chi_ionH %e chi_ionHe %e chi_lya %e z% e\n", chi_ionH , chi_ionHe, chi_lya, z);
+      }
+    }
 
     /* Peebles' coefficient (approximated as one when the Hydrogen
-       ionization fraction is very close to one) */
+           ionization fraction is very close to one) */
     if (x_H < ppr->recfast_x_H0_trigger2) {
-      C = (1. + K*_Lambda_*n*(1.-x_H))/(1./preco->fu+K*_Lambda_*n*(1.-x_H)/preco->fu +K*Rup*n*(1.-x_H));
+      C = (1. + K*pth->Lambda_over_theoritical_Lambda*_Lambda_*n*(1.-x_H))/(1./preco->fu+K*pth->Lambda_over_theoritical_Lambda*_Lambda_*n*(1.-x_H)/preco->fu +K*Rup_2*n*(1.-x_H));  /* 2 modifications : 1) Rup -> Rup_2 evaluating the coefficient using Trad instead of Tmat; 2) add pth->Lambda_over_theoritical_Lambda, 1 in the standard case, allow to constraint A2s1s otherwise*/
+      // C = (1. + K*_Lambda_*n*(1.-x_H))/(1./preco->fu+K*_Lambda_*n*(1.-x_H)/preco->fu +K*Rup*n*(1.-x_H));
+      // fprintf(stdout, "A2s1s %e\n", pth->Lambda_over_theoritical_Lambda*_Lambda_);
     }
     else {
       C = 1.;
-    }
 
-    /* For DM annihilation: fraction of injected energy going into
-       ionization and Lya excitation */
+      }
+      /* evolution of hydrogen ionisation fraction: */
 
-    /* - old approximation from Chen and Kamionkowski: */
+      dy[0] = (x*x_H*n*Rdown - Rup_2*(1.-x_H)*exp(-preco->CL/Tmat)) * C / (Hz*(1.+z))       /* Peeble's equation with fudged factors */
+            -energy_rate/n*((chi_ionH+chi_ionHe)/_L_H_ion_+chi_lya*(1.-C)/_L_H_alpha_)/(_h_P_*_c_*Hz*(1.+z)); /* energy injection (neglect fraction going to helium) */
 
-    //chi_ion_H = (1.-x)/3.;
+      // dy[0] = -5.89e-5*sqrt(Tmat/1e4)*exp(-1.58e5/Tmat)*(1-x_H)*x/ (Hz*(1.+z)) * 1e-6;     // Collisional ionisation, taken from 1503.04827, last factor is for conversion cm^3->m^3
 
-    /* coefficient as revised by Slatyer et al. 2013 (in fact it is a fit by Vivian Poulin of columns 1 and 2 in Table V of Slatyer et al. 2013): */
 
-    if (x < 1.)
-      chi_ion_H = 0.369202*pow(1.-pow(x,0.463929),1.70237);
-    else
-      chi_ion_H = 0.;
-
-    /* evolution of hydrogen ionisation fraction: */
-
+      // fprintf(stdout, "z %e Tmat %e collision %e DM  %e standard %e\n",z, Tmat, -5.89e-5*sqrt(Tmat/1e4)*exp(-1.58e5/Tmat)*(1-x_H)*x/ (Hz*(1.+z)) * 1e-6,-energy_rate/n*((chi_ionH+chi_ionHe)/_L_H_ion_+chi_lya*(1.-C)/_L_H_alpha_)/(_h_P_*_c_*Hz*(1.+z)),(x*x_H*n*Rdown - Rup_2*(1.-x_H)*exp(-preco->CL/Tmat)) * C / (Hz*(1.+z)));
+      if(pth->reio_parametrization == reio_stars_sfr_source_term){
+        dNion_over_dt=pth->f_esc*pth->Zeta_ion*rho_sfr;
+        stars_xe=dNion_over_dt/(Hz*(1.+z)*n);
+        dy[0] -= stars_xe*(1-x)/3;
+        // fprintf(stdout, " %e  %e  %e %e %e %e  %e\n",rho_sfr,stars_xe, dNion_over_dt,Hz,n,(1-x)/3,z );
+      }
     // JL: test for debugginf reio_inter
     //fprintf(stdout,"%e  %e  %e  %e\n",z,Tmat,K*_Lambda_*n,K*Rup*n);
 
-    dy[0] = (x*x_H*n*Rdown - Rup*(1.-x_H)*exp(-preco->CL/Tmat)) * C / (Hz*(1.+z))       /* Peeble's equation with fudged factors */
-      -energy_rate*chi_ion_H/n*(1./_L_H_ion_+(1.-C)/_L_H_alpha_)/(_h_P_*_c_*Hz*(1.+z)); /* energy injection (neglect fraction going to helium) */
-
+      if(pth->thermodynamics_verbose>10){
+      fprintf(stdout, "z %e Tmat %e  DM  %e standard %e stars %e \n",z, Tmat,-energy_rate/n*((chi_ionH+chi_ionHe)/_L_H_ion_+chi_lya*(1.-C)/_L_H_alpha_)/(_h_P_*_c_*Hz*(1.+z)),(x*x_H*n*Rdown - Rup_2*(1.-x_H)*exp(-preco->CL/Tmat)) * C / (Hz*(1.+z)),stars_xe);
+      }
   }
 
   /************/
@@ -5186,10 +5174,16 @@ int thermodynamics_derivs_with_recfast(
     /* equations modified to take into account energy injection from dark matter */
     //C_He=(1. + K_He*_Lambda_He_*n_He*(1.-x_He)*He_Boltz)/(1. + K_He*(_Lambda_He_+Rup_He)*n_He*(1.-x_He)*He_Boltz);
 
-    dy[1] = ((x*x_He*n*Rdown_He - Rup_He*(1.-x_He)*exp(-preco->CL_He/Tmat))
+    dy[1] = ((x*x_He*n*Rdown_He - Rup_He_2*(1.-x_He)*exp(-preco->CL_He/Tmat))
              *(1. + K_He*_Lambda_He_*n_He*(1.-x_He)*He_Boltz))
-      /(Hz*(1+z)* (1. + K_He*(_Lambda_He_+Rup_He)*n_He*(1.-x_He)*He_Boltz)); /* in case of energy injection due to DM, we neglect the contribution to helium ionization */
+      /(Hz*(1+z)* (1. + K_He*(_Lambda_He_+Rup_He_2)*n_He*(1.-x_He)*He_Boltz)); /* in case of energy injection due to DM, we neglect the contribution to helium ionization */
 
+    // dy[1] += -2.02e-9*sqrt(Tmat/1e4)*exp(-2.85e5/Tmat)*(1-x_He)*x / (Hz*(1.+z)) * 1e-6;     // Collisional ionisation, taken from 1503.04827, last factor is for conversion cm^3->m^3
+      //
+      // /*******************Helium**********************/
+      // dxedlna+=stars_xe*param->fHe*(1+tanh((6-z1)/0.5));
+      // if(z1<6)dxedlna+=stars_xe*param->fHe*(1+tanh((3.5-z1)/0.5));
+      /***********************************************/
     /* following is from recfast 1.4 */
     /* this correction is not self-consistent when there is energy injection  from dark matter, and leads to nan's  at small redshift (unimportant when reionization takes over before that redshift) */
 
@@ -5209,25 +5203,61 @@ int thermodynamics_derivs_with_recfast(
     dHdz=-pvecback[pba->index_bg_H_prime]/pvecback[pba->index_bg_H]/pba->a_today* _c_ / _Mpc_over_m_;
     epsilon = Hz * (1.+x+preco->fHe) / (preco->CT*pow(Trad,3)*x);
     dy[2] = preco->Tnow + epsilon*((1.+preco->fHe)/(1.+preco->fHe+x))*((dy[0]+preco->fHe*dy[1])/x)
-      - epsilon* dHdz/Hz + 3.*epsilon/(1.+z);
+      - epsilon* dHdz/Hz + 3.*epsilon/(1.+z) ;
   }
   else {
     /* equations modified to take into account energy injection from dark matter */
 
-    //chi_heat = (1.+2.*preio->reionization_table[i*preio->re_size+preio->index_re_xe])/3.; // old approximation from Chen and Kamionkowski
+    if(pth->annihilation >0 || pth->decay_fraction > 0 || pth->PBH_accreting_mass > 0 || pth->PBH_evaporating_mass > 0){
+      if (x < 1.){
+        /* coefficient as revised by Galli et al. 2013 (in fact it is an interpolation by Vivian Poulin of columns 1 and 2 in Table V of Galli et al. 2013) */
+        if(pth->energy_repart_coefficient==GSVI|| pth->energy_repart_coefficient ==chi_from_file){
+          class_call(thermodynamics_annihilation_coefficients_interpolate(ppr,pba,pth,x),
+                        error_message,
+                        error_message);
+            chi_heat = pth->chi_heat;
+        }
+        if(pth->energy_repart_coefficient==no_factorization){
+          class_call(thermodynamics_annihilation_coefficients_interpolate(ppr,pba,pth,z),
+                        error_message,
+                        error_message);
+            chi_heat = pth->chi_heat;
+        }
+        /* old approximation from Chen and Kamionkowski */
+        if(pth->energy_repart_coefficient==SSCK){
+            chi_heat = (1.+2.*x)/3.;
+        }
 
-    // coefficient as revised by Slatyer et al. 2013 (in fact it is a fit by Vivian Poulin of columns 1 and 2 in Table V of Slatyer et al. 2013)
-    if (x < 1.)
-      chi_heat = MIN(0.996857*(1.-pow(1.-pow(x,0.300134),1.51035)),1);
-    else
-      chi_heat = 1.;
+      }
+      else
+        chi_heat = 1.;
 
-    dy[2]= preco->CT * pow(Trad,4) * x / (1.+x+preco->fHe) * (Tmat-Trad) / (Hz*(1.+z)) + 2.*Tmat/(1.+z)
-      -2./(3.*_k_B_)*energy_rate*chi_heat/n/(1.+preco->fHe+x)/(Hz*(1.+z)); /* energy injection */
+        chi_heat= MIN(chi_heat,1.);
+        chi_heat = MAX(chi_heat,0.);
+      // fprintf(stdout, "z %e chi_heat %e chi_heat_old %e xe %e\n",z ,chi_heat,(1.+2.*x)/3., x);
+    }
+    else chi_heat = 0.;
+    dTdz_adia=2.*Tmat/(1.+z);
+    dTdz_CMB = preco->CT * pow(Trad,4) * x / (1.+x+preco->fHe) * (Tmat-Trad) / (Hz*(1.+z));
+    dTdz_DM = -2./(3.*_k_B_)*energy_rate*chi_heat/n/(1.+preco->fHe+x)/(Hz*(1.+z));
+    if(pth->star_heating_parametrization == heating_stars_sfr_source_term){
+    L_x = 2*pth->Ex * pth->fx * rho_sfr/(3*_k_B_*n*Hz*(1.+z)*(1.+x+preco->fHe));
+    dTdz_stars = -L_x*(1+2*x)/3.;
+    }
+    else dTdz_stars = 0;
+    dy[2]= dTdz_CMB + dTdz_adia + dTdz_DM + dTdz_stars; /* dTdz_DM = energy injection */
+
+    if(pth->thermodynamics_verbose>10){
+      fprintf(stdout, "chi_heat %e z% e\n", chi_heat, z);
+      fprintf(stdout, "z %e dT %e Tmat %e Trad %e dTdz_adia %e dTdz_CMB %e dTdz_DM %e dTdz_stars %e x %e\n", z, dy[2], Tmat, Trad,dTdz_adia, dTdz_CMB ,dTdz_DM,dTdz_stars,x);
+      }
+
+    // dy[2] += 5.89e-5*sqrt(Tmat/1e4)*exp(-1.58e5/Tmat)*(1-x_H)*x/ (Hz*(1.+z)) * 1e-6;
   }
 
   return _SUCCESS_;
 }
+
 /**
  * This routine merges the two tables 'recombination_table' and
  * 'reionization_table' inside the table 'thermodynamics_table', and
