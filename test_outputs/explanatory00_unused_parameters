@@ -1,0 +1,6 @@
+# List of input/precision parameters passed
+# but not used (just for info)
+#
+tau_dcdm_exo = 0.0
+Lambda_over_theoritical_Lambda = 1.
+star_heating_parametrization = heating_none

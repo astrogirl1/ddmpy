@@ -1,0 +1,6 @@
+# List of input/precision parameters passed
+# but not used (just for info)
+#
+Gamma_dcdm_exo = 0.0
+Gamma_dcdm_wdm = 0.0
+write warnings = yes
