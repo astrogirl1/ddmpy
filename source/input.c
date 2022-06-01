@@ -546,6 +546,7 @@ int input_read_parameters(
   double c_cor=0.;
 
   double Omega_tot;
+  int test_param=1;
 
   int i;
 
@@ -811,8 +812,14 @@ int input_read_parameters(
       pba->Omega_ini_dcdm = param2/pba->h/pba->h;
     if (flag3 == _TRUE_)
       pba->Omega_ini_dcdm = (param3/(1.-param3))*pba->Omega0_cdm;
+     
+  }
 
-      /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
+  class_read_int("test_param", test_param);  
+  if ((test_param==1)){
+    fprintf(stdout, "test_param = %i s \n",test_param);
+
+        /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
     class_call(parser_read_double(pfc,"Gamma_dcdm_exo",&param1,&flag1,errmsg),
                errmsg,
                errmsg);
@@ -844,11 +851,8 @@ int input_read_parameters(
       pth->photon_energy = param1;
       // printf("This reads photon_energy %g \n", pth->photon_energy);
     }
-   
-  
-  }
     
-    
+  }  
 
   // GFA: epsilon_dcdm_wdm parameter is read here because it is needed later for getting Gamma from log10(Gamma*epsilon)
 
@@ -5026,7 +5030,8 @@ int input_get_guess(double *xguess,
       break;
 
     case Omega_dcdmdrwdm: /* GFA */
-     Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
+    //  Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
+     Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+0.0001; /* MD */
      gamma = ba.Gamma_dcdm_wdm/ba.H0;
     if (gamma < 1)
       a_decay = 1.0;
@@ -5039,7 +5044,8 @@ int input_get_guess(double *xguess,
     break;
 
    case omega_dcdmdrwdm: /* GFA */
-     Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
+    //  Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
+    Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+0.0001; /* MD  */
      gamma = ba.Gamma_dcdm_wdm/ba.H0;
    if (gamma < 1)
       a_decay = 1.0;
@@ -5099,7 +5105,8 @@ int input_get_guess(double *xguess,
             Omega_ini_dcdm2 -> Omega_dcdmdrwdm and
             omega_ini_dcdm2 -> omega_dcdmdrwdm */
     Omega0_dcdmdrwdm*=pfzw->target_value[index_guess];
-    Omega_M = Omega0_dcdmdrwdm+ba.Omega0_cdm+ba.Omega0_b;
+    // Omega_M = Omega0_dcdmdrwdm+ba.Omega0_cdm+ba.Omega0_b;
+    Omega_M = Omega0_dcdmdrwdm+0.0001+ba.Omega0_b;
     gamma = ba.Gamma_dcdm_wdm/ba.H0;
     if (gamma < 1)
         a_decay = 1.0;

@@ -43,6 +43,7 @@ cdef extern from "class.h":
         short inter_normal
         short  has_ncdm
         double T_cmb
+        int test_param
         double h
         double H0
         double age
