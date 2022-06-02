@@ -546,7 +546,7 @@ int input_read_parameters(
   double c_cor=0.;
 
   double Omega_tot;
-  int test_param=1;
+  int test_param=0;
 
   int i;
 
@@ -958,6 +958,7 @@ int input_read_parameters(
      /* GFA: Convert Gamma to Mpc */
      if (flag1 == _TRUE_)
        pba->Gamma_dcdm_wdm = param1*(1.e3 / _c_);
+       fprintf(stdout,"Gamma_wdm = %.5e. \n",pba->Gamma_dcdm_wdm);
      if (flag2 == _TRUE_)
        pba->Gamma_dcdm_wdm = pow(10.,param2)*(1.e3 / _c_);
      if (flag3 == _TRUE_)
@@ -1686,19 +1687,51 @@ int input_read_parameters(
   //   class_read_double("z_end_asymmetric_planck_16",pth->z_end_asymmetric_planck_16);
   //   class_read_double("z_start_asymmetric_planck_16",pth->z_start_asymmetric_planck_16);
   // }
-
+  class_read_double("decay_fraction",pth->decay_fraction);
   /** - energy injection parameters from CDM annihilation/decay */
-
-  class_read_double("annihilation",pth->annihilation);
-   /** - Reading energy injection parameters from CDM annihilation/decay && PBH evaporation/accretion */
+  /** - Reading energy injection parameters from CDM annihilation/decay && PBH evaporation/accretion */
   /** - This includes many tests to make sure the user is giving meaningful commands */
+ class_read_int("test_param", test_param);  
+  if ((test_param==1)){
+    fprintf(stdout, "test_param = %i s \n",test_param);
 
+        /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
+    class_call(parser_read_double(pfc,"Gamma_dcdm_exo",&param1,&flag1,errmsg),
+               errmsg,
+               errmsg);
+    class_call(parser_read_double(pfc,"Log10_Gamma_dcdm_exo",&param2,&flag2,errmsg),
+               errmsg,
+               errmsg);
+
+    class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
+               errmsg,
+               "In input file, you can only enter one of Gamma_dcdm_exo or Log10_Gamma_dcdm_exo, choose one");
+
+     /* Convert to Mpc */
+    if (flag1 == _TRUE_)
+      // pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
+      pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
+      pba->tau_dcdm_exo = 1/(param1*1.02e-3)*(1e9*365*24*3600); //convert to sec.
+      fprintf(stdout, "you have chosen Gamma = %e km/s/Mpc, tau = %e s \n",pba->Gamma_dcdm_exo/(1.e3 / _c_),pba->tau_dcdm_exo);
+      
+    if (flag2 == _TRUE_)
+      pba->Gamma_dcdm_exo = pow(10.,param2)*(1.e3 / _c_);
+      pba->tau_dcdm_exo = 1/(pba->Gamma_dcdm_exo*1.02e-3)*(1e9*365*24*3600); //convert to sec.
+
+    // pba->epsilon_dcdm_wdm = 1;
+    /*Read photon_energy*/
+    class_call(parser_read_double(pfc,"photon_energy",&param1,&flag1,errmsg),
+             errmsg,
+             errmsg);
+    if(flag1=_TRUE_){
+      pth->photon_energy = param1;
+      // printf("This reads photon_energy %g \n", pth->photon_energy);
+    }
   class_read_double("annihilation",pth->annihilation);
   class_read_double("annihilation_cross_section",pth->annihilation_cross_section);
   class_read_double("DM_mass",pth->DM_mass);
   class_test(pth->DM_mass <=0 && pth->annihilation_cross_section >0,errmsg,"you have annihilation_cross_section > 0 but DM_mass = 0. That is weird, please check your param file and set 'DM_mass' [GeV] to a non-zero value.\n");
 
-  class_read_double("decay_fraction",pth->decay_fraction);
   class_test(pth->annihilation_cross_section <=0 && pth->DM_mass >0 && pth->annihilation <= 0 && pth->decay_fraction <=0,errmsg,"you have DM_mass > 0 but 'annihilation_cross_section', 'annihilation', 'decay_fraction' are zero. That is weird, please check your param file and set either 'annihilation_cross_section' [cm^3/s], 'annihilation' [m^3/(kg s)] or 'decay_fraction' to a non-zero value.\n");
   class_test(pba->tau_dcdm_exo <=0 && pth->decay_fraction >0,errmsg,"you have decay_fraction > 0 but Gamma_dcdm_exo = 0. That is weird, please check your param file and set 'tau_dcdm_exo' [s] or 'Gamma_dcdm_exo' [km/s/Mpc] to a non-zero value.\n");
   class_test(pba->tau_dcdm_exo >0 && pth->decay_fraction <=0,errmsg,"you have decay_fraction = 0 but tau_dcdm_exo > 0. That is weird, please check your param file.\n");
@@ -2172,7 +2205,7 @@ if(pth->PBH_evaporating_mass > 0.){
   pth->PBH_table_F = NULL;
   pth->PBH_table_F_dd = NULL;
 }
-
+}
   class_call(parser_read_string(pfc,
                                 "compute damping scale",
                                 &(string1),
