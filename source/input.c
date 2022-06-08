@@ -815,44 +815,7 @@ int input_read_parameters(
      
   }
 
-  class_read_int("test_param", test_param);  
-  if ((test_param==1)){
-    fprintf(stdout, "test_param = %i s \n",test_param);
-
-        /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
-    class_call(parser_read_double(pfc,"Gamma_dcdm_exo",&param1,&flag1,errmsg),
-               errmsg,
-               errmsg);
-    class_call(parser_read_double(pfc,"Log10_Gamma_dcdm_exo",&param2,&flag2,errmsg),
-               errmsg,
-               errmsg);
-
-    class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
-               errmsg,
-               "In input file, you can only enter one of Gamma_dcdm_exo or Log10_Gamma_dcdm_exo, choose one");
-
-     /* Convert to Mpc */
-    if (flag1 == _TRUE_)
-      // pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
-      pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
-      pba->tau_dcdm_exo = 1/(param1*1.02e-3)*(1e9*365*24*3600); //convert to sec.
-      fprintf(stdout, "you have chosen Gamma = %e km/s/Mpc, tau = %e s \n",pba->Gamma_dcdm_exo/(1.e3 / _c_),pba->tau_dcdm_exo);
-      
-    if (flag2 == _TRUE_)
-      pba->Gamma_dcdm_exo = pow(10.,param2)*(1.e3 / _c_);
-      pba->tau_dcdm_exo = 1/(pba->Gamma_dcdm_exo*1.02e-3)*(1e9*365*24*3600); //convert to sec.
-
-    // pba->epsilon_dcdm_wdm = 1;
-    /*Read photon_energy*/
-    class_call(parser_read_double(pfc,"photon_energy",&param1,&flag1,errmsg),
-             errmsg,
-             errmsg);
-    if(flag1=_TRUE_){
-      pth->photon_energy = param1;
-      // printf("This reads photon_energy %g \n", pth->photon_energy);
-    }
-    
-  }  
+  
 
   // GFA: epsilon_dcdm_wdm parameter is read here because it is needed later for getting Gamma from log10(Gamma*epsilon)
 
@@ -4933,6 +4896,7 @@ int input_try_unknown_parameters(double * unknown_parameter,
       break;
     case sigma8:
       output[i] = sp.sigma8-pfzw->target_value[i];
+      printf("sigma8= %g \n",output[i]);
       break;
     }
   }
@@ -5027,17 +4991,17 @@ int input_get_guess(double *xguess,
          for Omega_dcdm, not the combined.
          sqrt_one_minus_M = sqrt(1.0 - Omega_M);
          xguess[index_guess] = pfzw->target_value[index_guess]*
-         exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*
+         exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
-         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
+         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm_exo/ba.H0;
+      gamma = ba.Gamma_dcdm_wdm/ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
         a_decay = pow(1+(gamma*gamma-1.)/Omega_M,-1./3.);
         /* GFA: This a_decay is obtained from the Friedmann equation for an universe just with Omega_M and Omega_Lambda=1-Omega_M, imposing H(a_decay)=Gamma_dcdm_wdm */
-       /* Then time at a_decay is approximately given by t(a_decay)=(1/Gamma_dcdm_exo)*log(a_decay), so exp(-Gamma_dcdm_exo*t(a_decay))=1/a_decay */
+       /* Then time at a_decay is approximately given by t(a_decay)=(1/Gamma_dcdm_wdm)*log(a_decay), so exp(-Gamma_dcdm_wdm*t(a_decay))=1/a_decay */
       xguess[index_guess] = pfzw->target_value[index_guess]/a_decay;
       dxdy[index_guess] = 1./a_decay;
       //printf("x = Omega_ini_guess = %g, dxdy = %g\n",*xguess,*dxdy);
@@ -5048,11 +5012,11 @@ int input_get_guess(double *xguess,
          for Omega_dcdm, not the combined.
          sqrt_one_minus_M = sqrt(1.0 - Omega_M);
          xguess[index_guess] = pfzw->target_value[index_guess]*
-         exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*
+         exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
-         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_exo/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
+         dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm_exo/ba.H0;
+      gamma = ba.Gamma_dcdm_wdm/ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -5118,7 +5082,7 @@ int input_get_guess(double *xguess,
           omega_ini_dcdm -> omega_dcdmdr */
       Omega0_dcdmdr *=pfzw->target_value[index_guess];
       Omega_M = ba.Omega0_cdm+Omega0_dcdmdr+ba.Omega0_b;
-      gamma = ba.Gamma_dcdm_exo/ba.H0;
+      gamma = ba.Gamma_dcdm_wdm/ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -5158,10 +5122,11 @@ int input_get_guess(double *xguess,
       /* Assume linear relationship between A_s and sigma8 and fix coefficient
          according to vanilla LambdaCDM. Should be good enough... */
       xguess[index_guess] = 2.43e-9/0.87659*pfzw->target_value[index_guess];
+      printf("xguess = %g\n",xguess[index_guess]);
       dxdy[index_guess] = 2.43e-9/0.87659;
       break;
     }
-    //printf("xguess = %g\n",xguess[index_guess]);
+    
   }
 
   for (i=0; i<pfzw->fc.size; i++) {

@@ -919,7 +919,7 @@ if (pba->Omega0_dcdmdr != 0.){ /* GFA */
   // printf("pba->Omega0_dcdmdr %e\n", pba->Omega0_dcdmdr);
 
     pba->has_dcdm = _TRUE_;
-     if (pba->Gamma_dcdm_exo != 0.) {
+     if (pba->Gamma_dcdm_wdm != 0.) {
       pba->has_dr = _TRUE_;
       }
      }
@@ -2719,14 +2719,14 @@ int background_derivs(
   if (pba->has_dcdm == _TRUE_){
     /** - compute dcdm density \f$ \rho' = -3aH \rho - a \Gamma \rho \f$*/
     dy[pba->index_bi_rho_dcdm] = -3.*y[pba->index_bi_a]*pvecback[pba->index_bg_H]*y[pba->index_bi_rho_dcdm]-
-      y[pba->index_bi_a]*pba->Gamma_dcdm_exo*y[pba->index_bi_rho_dcdm];
+      y[pba->index_bi_a]*pba->Gamma_dcdm_wdm*y[pba->index_bi_rho_dcdm];
   }
 
   if (pba->has_dr == _TRUE_){
     /** - Compute dr density \f$ \rho' = -4aH \rho - a \Gamma \rho \f$ */
     dy[pba->index_bi_rho_dr] = -4.*y[pba->index_bi_a]*pvecback[pba->index_bg_H]*y[pba->index_bi_rho_dr];
     if(pba->has_dcdm == _TRUE_)
-      dy[pba->index_bi_rho_dr] += y[pba->index_bi_a]*pba->Gamma_dcdm_exo*y[pba->index_bi_rho_dcdm]*pba->epsilon_dcdm_wdm;
+      dy[pba->index_bi_rho_dr] += y[pba->index_bi_a]*pba->Gamma_dcdm_wdm*y[pba->index_bi_rho_dcdm]*pba->epsilon_dcdm_wdm;
     if(pba->has_ncdm == _TRUE_ && pba->Gamma_neutrinos[n_ncdm] > 0){
       // dy[pba->index_bi_rho_dr] += y[pba->index_bi_a]*pba->Gamma_neutrinos*pvecback[pba->index_bg_rho_ncdm1]; //5.06e15*_Mpc_over_m_ convert from GeV to invMpc
       for(n_ncdm = 0; n_ncdm<pba->N_ncdm; n_ncdm++){
