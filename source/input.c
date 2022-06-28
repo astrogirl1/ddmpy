@@ -5376,7 +5376,7 @@ int input_get_guess(double *xguess,
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
          dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm_exo / ba.H0;
+      gamma = ba.Gamma_dcdm_wdm / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -5397,7 +5397,7 @@ int input_get_guess(double *xguess,
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
          dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm_exo / ba.H0;
+      gamma = ba.Gamma_dcdm_wdm / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -5465,7 +5465,7 @@ int input_get_guess(double *xguess,
           omega_ini_dcdm -> omega_dcdmdr */
       Omega0_dcdmdr *= pfzw->target_value[index_guess];
       Omega_M = ba.Omega0_cdm + Omega0_dcdmdr + ba.Omega0_b;
-      gamma = ba.Gamma_dcdm_exo / ba.H0;
+      gamma = ba.Gamma_dcdm_wdm / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else

@@ -537,7 +537,6 @@ int input_read_parameters(
   double c_cor=0.;
 
   double Omega_tot;
-  int test_param;
 
   int i;
 

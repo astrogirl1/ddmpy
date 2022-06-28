@@ -1808,14 +1808,14 @@ int thermodynamics_DM_decay_energy_injection(
                                  pvecback),
                pba->error_message,
                ppr->error_message);
-    decay_factor = exp(-pba->Gamma_dcdm_exo*pvecback[pba->index_bg_time]);
+    decay_factor = exp(-pba->Gamma_dcdm_wdm*pvecback[pba->index_bg_time]);
     }
     rho_cdm_today = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*(pba->Omega0_cdm)*_c_*_c_; /* energy density in J/m^3 */
     rho_dcdm = rho_cdm_today*pow((1+z),3)*decay_factor; // This trick avoid mixing gravitational and electromagnetic impacts of the decay on the CMB power spectra.
   }
 
 
-  *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_exo*_c_/_Mpc_over_m_);
+  *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_wdm*_c_/_Mpc_over_m_);
   // fprintf(stdout, "*energy_rate %e\n",*energy_rate );
   free(pvecback);
 
