@@ -571,7 +571,7 @@ int input_read_parameters(
   double c_cor = 0.;
 
   double Omega_tot;
-  int test_param = 0;
+  int test_param = 1;
 
   int i;
 
@@ -1799,10 +1799,12 @@ int input_read_parameters(
 
     /* Convert to Mpc */
     if (flag1 == _TRUE_)
+    {
       // pba->Gamma_dcdm_exo = param1*(1.e3 / _c_);
       pba->Gamma_dcdm_exo = param1 * (1.e3 / _c_);
-    pba->tau_dcdm_exo = 1 / (param1 * 1.02e-3) * (1e9 * 365 * 24 * 3600); // convert to sec.
-    fprintf(stdout, "you have chosen Gamma = %e km/s/Mpc, tau = %e s \n", pba->Gamma_dcdm_exo / (1.e3 / _c_), pba->tau_dcdm_exo);
+      pba->tau_dcdm_exo = 1 / (param1 * 1.02e-3) * (1e9 * 365 * 24 * 3600); // convert to sec.
+      fprintf(stdout, "you have chosen Gamma = %e km/s/Mpc, tau = %e s, Gamma_wdm = %e  \n", pba->Gamma_dcdm_exo / (1.e3 / _c_), pba->tau_dcdm_exo);
+    }
 
     if (flag2 == _TRUE_)
       pba->Gamma_dcdm_exo = pow(10., param2) * (1.e3 / _c_);
@@ -5374,7 +5376,7 @@ int input_get_guess(double *xguess,
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
          dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm_wdm / ba.H0;
+      gamma = ba.Gamma_dcdm_exo / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -5395,7 +5397,7 @@ int input_get_guess(double *xguess,
          atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
          dxdy[index_guess] = 1.0;//exp(2./3.*ba.Gamma_dcdm_wdm/ba.H0*atanh(sqrt_one_minus_M)/sqrt_one_minus_M);
       */
-      gamma = ba.Gamma_dcdm_wdm / ba.H0;
+      gamma = ba.Gamma_dcdm_exo / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
@@ -5463,7 +5465,7 @@ int input_get_guess(double *xguess,
           omega_ini_dcdm -> omega_dcdmdr */
       Omega0_dcdmdr *= pfzw->target_value[index_guess];
       Omega_M = ba.Omega0_cdm + Omega0_dcdmdr + ba.Omega0_b;
-      gamma = ba.Gamma_dcdm_wdm / ba.H0;
+      gamma = ba.Gamma_dcdm_exo / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
       else
