@@ -17,7 +17,7 @@ vpath .base build
 ########################################################
 
 # your C compiler:
-CC       = clang
+CC       = gcc
 #CC       = icc
 #CC       = pgcc
 
@@ -44,11 +44,11 @@ OPTFLAG = -O4 -ffast-math #-march=native
 
 # all other compilation flags
 CCFLAG = -g -fPIC
-LDFLAG = -g -fPIC
+LDFLAG = -g -fPIC -t -W
 
 # leave blank to compile without HyRec, or put path to HyRec directory
 # (with no slash at the end: e.g. hyrec or ../hyrec)
-HYREC = hyrec
+HYREC = HyRec_2017
 
 ########################################################
 ###### IN PRINCIPLE THE REST SHOULD BE LEFT UNCHANGED ##
@@ -68,8 +68,8 @@ ifneq ($(HYREC),)
 vpath %.c $(HYREC)
 CCFLAG += -DHYREC
 #LDFLAGS += -DHYREC
-INCLUDES += -I../hyrec
-EXTERNAL += hyrectools.o helium.o hydrogen.o history.o
+INCLUDES += -I../$(HYREC)/include
+EXTERNAL += hyrectools.o helium.o hydrogen.o history.o energy_injection.o
 endif
 
 %.o:  %.c .base

@@ -408,7 +408,7 @@ int thermodynamics_init(
              "stop to avoid division by zero");
   // class_test(pth->alpha_asymmetric_planck_16<1.5 || pth->alpha_asymmetric_planck_16>50 ,pth->error_message,
 	//      "alpha_asymmetric_planck_16 out of range [1.5,50]: rejected to avoid memory leakage.");
-  // /** - assign values to all indices in the structures with thermodynamics_indices()*/
+  /** - assign values to all indices in the structures with thermodynamics_indices()*/
 
   class_call(thermodynamics_indices(pth,preco,preio),
              pth->error_message,
@@ -1121,29 +1121,29 @@ int thermodynamics_indices(
 
   }
 
-  if (pth->reio_parametrization == reio_asymmetric_planck_16){
+  // if (pth->reio_parametrization == reio_asymmetric_planck_16){
 
-    preio->index_reio_xe_before = index;
-    index++;
-    preio->index_reio_xe_after = index;
-    index++;
-    preio->index_alpha_asymmetric_planck_16 = index;
-    index++;
-    preio->index_z_end_asymmetric_planck_16= index;
-    index++;
-    preio->index_z_start_asymmetric_planck_16= index;
-    index++;
-    preio->index_helium_fullreio_fraction = index;
-    index++;
-    preio->index_helium_fullreio_redshift = index;
-    index++;
-    preio->index_helium_fullreio_width = index;
-    index++;
+  //   preio->index_reio_xe_before = index;
+  //   index++;
+  //   preio->index_reio_xe_after = index;
+  //   index++;
+  //   preio->index_alpha_asymmetric_planck_16 = index;
+  //   index++;
+  //   preio->index_z_end_asymmetric_planck_16= index;
+  //   index++;
+  //   preio->index_z_start_asymmetric_planck_16= index;
+  //   index++;
+  //   preio->index_helium_fullreio_fraction = index;
+  //   index++;
+  //   preio->index_helium_fullreio_redshift = index;
+  //   index++;
+  //   preio->index_helium_fullreio_width = index;
+  //   index++;
 
 
-    preio->reio_num_params = index;
+  //   preio->reio_num_params = index;
 
-  }
+  // }
 
   if (pth->reio_parametrization == reio_stars_sfr_source_term){
 
@@ -1786,7 +1786,7 @@ int thermodynamics_DM_decay_energy_injection(
                ppr->error_message);
      rho_dcdm = pvecback[pba->index_bg_rho_dcdm]*pow(_Mpc_over_m_,2)*3/8./_PI_/_G_*_c_*_c_; /* energy density in J/m^3 */
      /* If uncommented, these lines allow to check approximation when computing the dcdm density with analytical results. Works very well until Omega_lambda dominates, then ~10% difference. */
-    //  result_integrale = exp(-pba->Gamma_dcdm_wdm*2*((pba->Omega0_b+pba->Omega0_cdm)*pow(pba->Omega0_g+(pba->Omega0_b+pba->Omega0_cdm)/(1+z),0.5)
+    //  result_integrale = exp(-pba->Gamma_dcdm_exo_exo_exo*2*((pba->Omega0_b+pba->Omega0_cdm)*pow(pba->Omega0_g+(pba->Omega0_b+pba->Omega0_cdm)/(1+z),0.5)
     //  +2*pow(pba->Omega0_g,1.5)*(1+z)-2*pba->Omega0_g*pow((1+z)*(pba->Omega0_g*(1+z)+(pba->Omega0_b+pba->Omega0_cdm)),0.5))/(3*pow((pba->Omega0_b+pba->Omega0_cdm),2)*(1+z)*pba->H0));
     //   rho_dcdm_approchee = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*(pba->Omega_ini_dcdm)*_c_*_c_*result_integrale*pow(1+z,3);
     //   fprintf(stdout, "z = %e vrai = %e  approchee = %e relativ diff = %e\n",z,rho_dcdm, rho_dcdm_approchee,(rho_dcdm-rho_dcdm_approchee)/rho_dcdm_approchee);
@@ -1808,14 +1808,14 @@ int thermodynamics_DM_decay_energy_injection(
                                  pvecback),
                pba->error_message,
                ppr->error_message);
-    decay_factor = exp(-pba->Gamma_dcdm_wdm*pvecback[pba->index_bg_time]);
+    decay_factor = exp(-pba->Gamma_dcdm_exo*pvecback[pba->index_bg_time]);
     }
     rho_cdm_today = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*(pba->Omega0_cdm)*_c_*_c_; /* energy density in J/m^3 */
     rho_dcdm = rho_cdm_today*pow((1+z),3)*decay_factor; // This trick avoid mixing gravitational and electromagnetic impacts of the decay on the CMB power spectra.
   }
 
 
-  *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_wdm*_c_/_Mpc_over_m_);
+  *energy_rate = rho_dcdm*preco->decay_fraction*(pba->Gamma_dcdm_exo*_c_/_Mpc_over_m_);
   // fprintf(stdout, "*energy_rate %e\n",*energy_rate );
   free(pvecback);
 
@@ -2529,76 +2529,76 @@ int thermodynamics_reionization_function(
     return _SUCCESS_;
 
   }
-  if(pth->reio_parametrization == reio_asymmetric_planck_16){
-    if(z > preio->reionization_parameters[preio->index_reio_start]) {
-      *xe = preio->reionization_parameters[preio->index_reio_xe_before];
+  // if(pth->reio_parametrization == reio_asymmetric_planck_16){
+  //   if(z > preio->reionization_parameters[preio->index_reio_start]) {
+  //     *xe = preio->reionization_parameters[preio->index_reio_xe_before];
 
-    }
+  //   }
 
-    else {
+  //   else {
 
-    if(z < preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]){
-
-
-    *xe =  (preio->reionization_parameters[preio->index_reio_xe_after]
-             -preio->reionization_parameters[preio->index_reio_xe_before]);
-
-    }
-    else{
-      factor = pow((preio->reionization_parameters[preio->index_reio_start]-z)/(preio->reionization_parameters[preio->index_reio_start]-preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]),preio->reionization_parameters[preio->index_alpha_asymmetric_planck_16]);
-      *xe = (preio->reionization_parameters[preio->index_reio_xe_after]
-               -preio->reionization_parameters[preio->index_reio_xe_before])*
-               factor;
-      *xe = MAX(preio->reionization_parameters[preio->index_reio_xe_before],*xe);
-
-    }
-
-    if(*xe > 0.1*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_10_percent == 0){
-      pth->z_10_percent = z;
-      // fprintf(stdout, "pth->z_10_percent %e\n", pth->z_10_percent);
-    }
-    if(*xe > 0.50*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_50_percent == 0 ){
-      pth->z_50_percent = z;
-      // fprintf(stdout, "pth->z_50_percent %e\n", pth->z_50_percent);
-
-    }
-    if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent == 0){
-    // if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent > 200){
-      pth->z_99_percent = z;
-      // class_test(pth->z_99_percent<=6,
-      //            pth->error_message,
-      //            "z_99_percent < 6, we reject the point");
+  //   // if(z < preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]){
 
 
-    }
-    if(pth->z_99_percent != 0 && pth->z_10_percent != 0 && pth->duration_of_reionization == 0){
-      pth->duration_of_reionization = pth->z_10_percent  - pth->z_99_percent;
-      if(pth->duration_of_reionization < 0) pth->duration_of_reionization ==0;
-      // class_test(pth->duration_of_reionization<1,
-      //            pth->error_message,
-      //            "duration_of_reionization < 1, we reject the point");
-      // fprintf(stdout, "pth->duration_of_reionization %e v2 %e \n", pth->duration_of_reionization,pth->z_10_percent  -preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]);
+  //   // *xe =  (preio->reionization_parameters[preio->index_reio_xe_after]
+  //   //          -preio->reionization_parameters[preio->index_reio_xe_before]);
 
-    }
-    // fprintf(stdout, "z %e xe %e factor %e\n",z,*xe,factor);
+  //   // }
+  //   else{
+  //     factor = pow((preio->reionization_parameters[preio->index_reio_start]-z)/(preio->reionization_parameters[preio->index_reio_start]-preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]),preio->reionization_parameters[preio->index_alpha_asymmetric_planck_16]);
+  //     *xe = (preio->reionization_parameters[preio->index_reio_xe_after]
+  //              -preio->reionization_parameters[preio->index_reio_xe_before])*
+  //              factor;
+  //     *xe = MAX(preio->reionization_parameters[preio->index_reio_xe_before],*xe);
 
-    /** -> case z < z_reio_start: helium contribution (tanh of simpler argument) */
-    /********Helium reionization is taken into account with a camb-like parametrization***********/
-      argument = (preio->reionization_parameters[preio->index_helium_fullreio_redshift] - z)
-        /preio->reionization_parameters[preio->index_helium_fullreio_width];
-      /* no possible segmentation fault: checked to be non-zero in thermodynamics_reionization() */
-      *xe += preio->reionization_parameters[preio->index_helium_fullreio_fraction]
-        * (tanh(argument)+1.)/2.;
-    // fprintf(stdout, "z %e x_e %e xe_before %e factor %elambda %e zp %e qp %e\n", z,*xe,preio->reionization_parameters[preio->index_reio_xe_before],factor,preio->reionization_parameters[preio->index_lambda_douspis_et_al],preio->reionization_parameters[preio->index_zp_douspis_et_al],preio->reionization_parameters[preio->index_Qp_douspis_et_al]);
+  //   }
+
+  //   if(*xe > 0.1*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_10_percent == 0){
+  //     pth->z_10_percent = z;
+  //     // fprintf(stdout, "pth->z_10_percent %e\n", pth->z_10_percent);
+  //   }
+  //   if(*xe > 0.50*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_50_percent == 0 ){
+  //     pth->z_50_percent = z;
+  //     // fprintf(stdout, "pth->z_50_percent %e\n", pth->z_50_percent);
+
+  //   }
+  //   if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent == 0){
+  //   // if(*xe > 0.99*(preio->reionization_parameters[preio->index_reio_xe_after]-preio->reionization_parameters[preio->index_reio_xe_before]) && pth->z_99_percent > 200){
+  //     pth->z_99_percent = z;
+  //     // class_test(pth->z_99_percent<=6,
+  //     //            pth->error_message,
+  //     //            "z_99_percent < 6, we reject the point");
+
+
+  //   }
+  //   if(pth->z_99_percent != 0 && pth->z_10_percent != 0 && pth->duration_of_reionization == 0){
+  //     pth->duration_of_reionization = pth->z_10_percent  - pth->z_99_percent;
+  //     if(pth->duration_of_reionization < 0) pth->duration_of_reionization ==0;
+  //     // class_test(pth->duration_of_reionization<1,
+  //     //            pth->error_message,
+  //     //            "duration_of_reionization < 1, we reject the point");
+  //     // fprintf(stdout, "pth->duration_of_reionization %e v2 %e \n", pth->duration_of_reionization,pth->z_10_percent  -preio->reionization_parameters[preio->index_z_end_asymmetric_planck_16]);
+
+  //   }
+  //   // fprintf(stdout, "z %e xe %e factor %e\n",z,*xe,factor);
+
+  //   /** -> case z < z_reio_start: helium contribution (tanh of simpler argument) */
+  //   /********Helium reionization is taken into account with a camb-like parametrization***********/
+  //     argument = (preio->reionization_parameters[preio->index_helium_fullreio_redshift] - z)
+  //       /preio->reionization_parameters[preio->index_helium_fullreio_width];
+  //     /* no possible segmentation fault: checked to be non-zero in thermodynamics_reionization() */
+  //     *xe += preio->reionization_parameters[preio->index_helium_fullreio_fraction]
+  //       * (tanh(argument)+1.)/2.;
+  //   // fprintf(stdout, "z %e x_e %e xe_before %e factor %elambda %e zp %e qp %e\n", z,*xe,preio->reionization_parameters[preio->index_reio_xe_before],factor,preio->reionization_parameters[preio->index_lambda_douspis_et_al],preio->reionization_parameters[preio->index_zp_douspis_et_al],preio->reionization_parameters[preio->index_Qp_douspis_et_al]);
 
 
 
-    }
+  //   }
 
 
-    return _SUCCESS_;
+  //   return _SUCCESS_;
 
-  }
+  // }
   if(pth->reio_parametrization == reio_stars_sfr_source_term){
     if(z > preio->reionization_parameters[preio->index_reio_start]) {
       *xe = preio->reionization_parameters[preio->index_reio_xe_before];
@@ -3304,25 +3304,25 @@ int thermodynamics_reionization(
   //              "stop to avoid division by zero");
   //   //  preio->reionization_parameters[preio->index_reio_start] = ppr->reionization_z_start_max;
 
-    //  class_test(preio->reionization_parameters[preio->index_reio_start] > ppr->reionization_z_start_max,
-    //             pth->error_message,
-    //             "starting redshift for reionization > reionization_z_start_max = %e\n",ppr->reionization_z_start_max);
+  //    class_test(preio->reionization_parameters[preio->index_reio_start] > ppr->reionization_z_start_max,
+  //               pth->error_message,
+  //               "starting redshift for reionization > reionization_z_start_max = %e\n",ppr->reionization_z_start_max);
 
-     /* infer xe_before_reio */
-    //  class_call(thermodynamics_get_xe_before_reionization(ppr,
-    //                                                       pth,
-    //                                                       preco,
-    //                                                       preio->reionization_parameters[preio->index_reio_start],
-    //                                                       &(preio->reionization_parameters[preio->index_reio_xe_before])),
-    //             pth->error_message,
-    //             pth->error_message);
-    //  /* fill reionization table */
-    //  class_call(thermodynamics_reionization_sample(ppr,pba,pth,preco,preio,pvecback),
-    //             pth->error_message,
-    //             pth->error_message);
-    //  pth->tau_reio=preio->reionization_optical_depth;
+  //    /* infer xe_before_reio */
+  //    class_call(thermodynamics_get_xe_before_reionization(ppr,
+  //                                                         pth,
+  //                                                         preco,
+  //                                                         preio->reionization_parameters[preio->index_reio_start],
+  //                                                         &(preio->reionization_parameters[preio->index_reio_xe_before])),
+  //               pth->error_message,
+  //               pth->error_message);
+  //    /* fill reionization table */
+  //    class_call(thermodynamics_reionization_sample(ppr,pba,pth,preco,preio,pvecback),
+  //               pth->error_message,
+  //               pth->error_message);
+  //    pth->tau_reio=preio->reionization_optical_depth;
 
-    //  return _SUCCESS_;
+  //    return _SUCCESS_;
 
   // }
 
@@ -3903,10 +3903,10 @@ int thermodynamics_reionization_sample(
 
 }
 
-/**
- * Integrate thermodynamics with your favorite recombination code.
- *
- */
+//**
+ /* Integrate thermodynamics with your favorite recombination code.
+ /*
+ /*/
 
 int thermodynamics_recombination(
                                  struct precision * ppr,
@@ -3931,226 +3931,6 @@ int thermodynamics_recombination(
                pth->error_message);
 
   }
-
-  if (pth->recombination==cosmorec) {
-        class_call(thermodynamics_recombination_with_cosmorec(ppr,pba,pth,preco,pvecback),
-               pth->error_message,
-               pth->error_message);
-  }
-
-  return _SUCCESS_;
-
-}
-/**
- * Integrate thermodynamics with CosmoRec.
- *
- * Integrate thermodynamics with CosmoRec, allocate and fill the part
- * of the thermodynamics interpolation table (the rest is filled in
- * thermodynamics_init()). Called once by
- * thermodynamics_recombination(), from thermodynamics_init().
- *
- *************************************************************************************************
- *                 CosmoRec: Cosmological Recombination Project
- *                Written by Jens Chluba (University of Manchester)
- *************************************************************************************************
- * @param ppr      Input: pointer to precision structure
- * @param pba      Input: pointer to background structure
- * @param pth      Input: pointer to thermodynamics structure
- * @param preco    Output: pointer to recombination structure
- * @param pvecback Input: pointer to an allocated (but empty) vector of background variables
- */
-int thermodynamics_recombination_with_cosmorec(
-                                            struct precision * ppr,
-                                            struct background * pba,
-                                            struct thermo * pth,
-                                            struct recombination * preco,
-                                            double * pvecback
-                                            ) {
-#ifdef COSMOREC
-  int i;
-  double nH0 = 11.223846333047*pba->Omega0_b*pba->h*pba->h*(1.-pth->YHe);  /* number density of hydrogen today in m-3 */
-  double rho_cdm_today = pow(pba->H0*_c_/_Mpc_over_m_,2)*3/8./_PI_/_G_*pba->Omega0_cdm*_c_*_c_; /* energy density in J/m^3 */
-  double DM_annihilation =  pth->annihilation*1e-6/_c_/_c_*pow(rho_cdm_today,2)/nH0*1e6/_eV_; /*conversion in cosmorec unit as described in Chluba 2010 0910.3663 (without factor 2, to respect class convention of majorana particles)*/
-  preco->f_eff = 1;
-
-  if(preco->energy_deposition_function == function_from_file){
-
-        if(preco->energy_repart_coefficient!=no_factorization){
-          class_call(thermodynamics_annihilation_f_eff_interpolate(ppr,pba,preco,600),
-                    pth->error_message,
-                    pth->error_message);
-          preco->f_eff=MAX(preco->f_eff,0.);
-        }
-        else{
-          class_call(thermodynamics_annihilation_coefficients_interpolate(ppr,pba,pth,600),
-                         pth->error_message,
-                         pth->error_message);
-          preco->f_eff = (pth->chi_heat+pth->chi_ionH+pth->chi_ionHe+pth->chi_lya); // we use the corrected scheme which will multiply the SSCK prescription (currently hardcoded in cosmorec).
-        }
-  }
-  // // /***********************************************************************************************************************/
-  else if(preco->energy_deposition_function == DarkAges){
-      class_call(thermodynamics_annihilation_coefficients_interpolate(ppr,pba,pth,600),
-                     pth->error_message,
-                     pth->error_message);
-      preco->f_eff = (pth->chi_heat+pth->chi_ionH+pth->chi_ionHe+pth->chi_lya); // we use the corrected scheme which will multiply chen&kamionkowski's prescription (currently hardcoded in cosmorec).
-  }
-
-
-
-  DM_annihilation *= preco->f_eff;
-  double runpars[4] = {
-    DM_annihilation, /* defines the dark matter annihilation efficiency in eV/s. */
-    pth->cosmorec_accuracy, /* setting for cosmorec accuracy (default = default cosmorec setting) */
-    pth->cosmorec_verbose, /* setting for cosmorec verbose (default = no output produced) */
-    pth->Lambda_over_theoritical_Lambda *_Lambda_ /* theoritical value by Labzowsky et al 2005 for H1_A2s_1s is rescaled, by default Lambda_over_theoritical_Lambda = 1. In agreement with standard cosmorec.*/
-  };
-
-  double H0 = pba->H0 / 1e3 * _c_;
-  int nz = ppr->recfast_Nz0;
-  double * z_arr;
-  double * Hz_arr;
-  double z, xe, Tm, Hz;
-  double z_start=ppr->recfast_z_initial;
-  double z_end=0;
-  double step;
-
-  double tau_at_z;
-  int last_index;
-
-  double * xe_out;
-  double * tb_out;
-
-  double drho_dt = 0, Tg;
-  double dlnTb_dz;
-  int label=0; /* iterator for cosmorec output file name, not used in class version of cosmorec */
-
-  /* Initialize Hubble rate for CosmoRec */
-  class_alloc(z_arr, sizeof(double) * nz, pth->error_message);
-  class_alloc(Hz_arr, sizeof(double) * nz, pth->error_message);
-
-  step = (z_start - z_end) / (nz);
-  for(i=0; i < nz; i++) {
-    z_arr[i] = z_end + i * step;
-
-      class_call(
-        background_tau_of_z(
-          pba,
-          z_arr[i],
-          &tau_at_z
-        ),
-        pba->error_message,
-        pth->error_message
-      );
-
-      class_call(
-        background_at_tau(
-          pba,
-          tau_at_z,
-          pba->short_info,
-          pba->inter_normal,
-          &last_index,
-          pvecback
-        ),
-        pba->error_message,
-        pth->error_message
-      );
-
-      Hz_arr[i]=pvecback[pba->index_bg_H] * _c_ / _Mpc_over_m_;
-  }
-  /* Initialize x_e and tb output tables */
-
-  class_alloc(xe_out, sizeof(double) * nz, pth->error_message);
-  class_alloc(tb_out, sizeof(double) * nz, pth->error_message);
-
-  /* call cosmorec */
-  /* Currently we give parameters separetely, eventually to be changed for a structure, easier to modify.*/
-
-  cosmorec_calc_h_cpp_(
-    &(pth->cosmorec_runmode), runpars,
-    &(pba->Omega0_cdm), &(pba->Omega0_b), &(pba->Omega0_k),
-    &(pba->Neff), &H0,
-    &(pba->T_cmb), &(pth->YHe),
-    z_arr, Hz_arr, &nz,
-    z_arr, xe_out, tb_out,
-    &nz,
-    &label
-  );
-
-  /** - fill a few parameters in preco and pth */
-
-
-
-  preco->rt_size = nz;
-  preco->H0 = pba->H0 * _c_ / _Mpc_over_m_;
-  /* preco->H0 in inverse seconds (while pba->H0 is [H0/c] in inverse Mpcs) */
-  preco->YHe = pth->YHe;
-  preco->Nnow = 3.*preco->H0*preco->H0*pba->Omega0_b*(1.-preco->YHe)/(8.*_PI_*_G_*_m_H_);
-  /* energy injection parameters */
-  preco->annihilation = pth->annihilation;
-  preco->has_on_the_spot = pth->has_on_the_spot;
-  preco->decay_fraction = pth->decay_fraction;
-  preco->annihilation_f_halo = pth->annihilation_f_halo;
-  preco->annihilation_z_halo = pth->annihilation_z_halo;
-  pth->n_e=preco->Nnow;
-
-  /** - allocate memory for thermodynamics interpolation tables (size known in advance) and fill it */
-
-  class_alloc(preco->recombination_table,preco->re_size*preco->rt_size*sizeof(double),pth->error_message);
-
-  for(i=nz-1; i >= 0; i--) {
-
-    /** - --> get redshift, corresponding results from cosmorec, and background quantities */
-
-    z = z_arr[i];
-    xe = xe_out[i];
-    Tm = tb_out[i];
-    Hz = Hz_arr[i];
-    /** - --> store the results in the table */
-
-    /* results are obtained in order of decreasing z, and stored in order of growing z */
-
-    /* redshift */
-    *(preco->recombination_table+(i)*preco->re_size+preco->index_re_z)=z;
-
-    /* ionization fraction */
-    *(preco->recombination_table+(i)*preco->re_size+preco->index_re_xe)=xe;
-
-    /* Tb */
-    *(preco->recombination_table+(i)*preco->re_size+preco->index_re_Tb)=Tm;
-
-    /* cb2 = (k_B/mu) Tb (1-1/3 dlnTb/dlna) = (k_B/mu) Tb (1+1/3 (1+z) dlnTb/dz)
-       with (1+z)dlnTb/dz= - [dlnTb/dlna] */
-    /* note that m_H / mu = 1 + (m_H/m_He-1) Y_p + x_e (1-Y_p) */
-
-    Tg = pba->T_cmb * (1+z);
-    dlnTb_dz = - Tg/Tm*drho_dt/(1+z)/Hz+1/(1+z);
-
-   evaluate_TM(z, xe,preco->fHe, Tm/Tg, Tg, Hz, &drho_dt);
-    *(preco->recombination_table+(i)*preco->re_size+preco->index_re_cb2)
-      = _k_B_ / ( _c_ * _c_ * _m_H_ ) * (1. + (1./_not4_ - 1.) * pth->YHe + xe * (1.-pth->YHe)) * Tm * (1. + (1+z)*dlnTb_dz / 3.);
-    /* dkappa/dtau = a n_e x_e sigma_T = a^{-2} n_e(today) x_e sigma_T (in units of 1/Mpc) */
-    *(preco->recombination_table+(i)*preco->re_size+preco->index_re_dkappadtau)
-      = (1.+z) * (1.+z) * preco->Nnow * xe * _sigma_ * _Mpc_over_m_;
-      //  fprintf(stdout,"xe %e Tm %e cb2 %e z %e dlnTb_dz %e *dkappa_dtau %e\n",xe,Tm,*(preco->recombination_table+(i)*preco->re_size+preco->index_re_cb2),z,dlnTb_dz,*(preco->recombination_table+(i)*preco->re_size+preco->index_re_dkappadtau));
-
-  }
-
-  /* clean up */
-
-  free(xe_out);
-  free(tb_out);
-
-  free(z_arr);
-  free(Hz_arr);
-
-#else
-
-class_stop(pth->error_message,
-           "you compiled without including the CosmoRec code, and now wish to use it. Either set the input parameter 'recombination' to something else than 'CosmoRec', or recompile after setting in the Makefile the appropriate path COSMOREC=... ");
-
-
-#endif /* COSMOREC */
 
   return _SUCCESS_;
 
@@ -4177,269 +3957,237 @@ class_stop(pth->error_message,
  * @param pvecback Input: pointer to an allocated (but empty) vector of background variables
  */
 
-int thermodynamics_recombination_with_hyrec(
-                                            struct precision * ppr,
-                                            struct background * pba,
-                                            struct thermo * pth,
-                                            struct recombination * preco,
-                                            double * pvecback
-                                            ) {
-  /** Summary: */
-#ifdef HYREC
+ int thermodynamics_recombination_with_hyrec(
+                                             struct precision * ppr,
+                                             struct background * pba,
+                                             struct thermo * pth,
+                                             struct recombination * preco,
+                                             double * pvecback
+                                             ) {
+   /** Summary: */
+ #ifdef HYREC
 
-  REC_COSMOPARAMS param;
-  HRATEEFF rate_table;
-  TWO_PHOTON_PARAMS twog_params;
-  double *xe_output, *Tm_output;
-  int i,j,l,Nz,b;
-  double z, xe, Tm, Hz;
-  FILE *fA;
-  FILE *fR;
-  double L2s1s_current;
-  void * buffer;
-  int buf_size;
-  double tau;
-  int last_index_back;
-  double w_fld,dw_over_da_fld,integral_fld;
+   HYREC_DATA hyrec_data;
+   hyrec_allocate(&hyrec_data, ppr->recfast_z_initial, 0.);
 
-  /** - Fill hyrec parameter structure */
+   double Omega_m = pba->Omega0_b + pba->Omega0_cdm + pba->Omega0_ncdm_tot;
 
-  param.T0 = pba->T_cmb;
-  param.obh2 = pba->Omega0_b*pba->h*pba->h;
-  param.omh2 = (pba->Omega0_b+pba->Omega0_cdm+pba->Omega0_ncdm_tot)*pba->h*pba->h;
-  param.okh2 = pba->Omega0_k*pba->h*pba->h;
-  param.odeh2 = (pba->Omega0_lambda+pba->Omega0_fld)*pba->h*pba->h;
-  class_call(background_w_fld(pba,pba->a_today,&w_fld,&dw_over_da_fld,&integral_fld), pba->error_message, pth->error_message);
-  param.w0 = w_fld;
-  param.wa = -dw_over_da_fld*pba->a_today;
-  param.Y = pth->YHe;
-  param.Nnueff = pba->Neff;
-  param.nH0 = 11.223846333047*param.obh2*(1.-param.Y);  /* number density of hydrogen today in m-3 */
-  param.fHe = param.Y/(1-param.Y)/3.97153;              /* abundance of helium by number */
-  param.zstart = ppr->recfast_z_initial; /* Redshift range */
-  param.zend = 0.;
-  param.dlna = 8.49e-5;
-  param.nz = (long) floor(2+log((1.+param.zstart)/(1.+param.zend))/param.dlna);
-  param.annihilation = pth->annihilation;
-  param.has_on_the_spot = pth->has_on_the_spot;
-  param.decay = pth->decay;
-  param.annihilation_variation = pth->annihilation_variation;
-  param.annihilation_z = pth->annihilation_z;
-  param.annihilation_zmax = pth->annihilation_zmax;
-  param.annihilation_zmin = pth->annihilation_zmin;
-  param.annihilation_f_halo = pth->annihilation_f_halo;
-  param.annihilation_z_halo = pth->annihilation_z_halo;
+   double alpha_ratio = 1.;    /* Ratio of fine-structure constant to standard value */
+   double me_ratio    = 1.;    /* Ratio of electron mass to standard value */
 
-  /** - Build effective rate tables */
+   double pann        = 1.78266e-21 *pth->annihilation;  /* Converting from m^3/s/kg to cm^3/s/GeV */
+   double pann_halo   = 1.78266e-21 *pth->annihilation_f_halo;
 
-  /* allocate contiguous memory zone */
+   int i,j,Nz;
+   double z, xe, Tm, Hz;
+   void * buffer;
+   double tau;
+   int last_index_back,last_index_back2;
+   int on_the_spot = 1;
 
-  buf_size = (2*NTR+NTM+2*NTR*NTM+2*param.nz)*sizeof(double) + 2*NTM*sizeof(double*);
+   if(pth->has_on_the_spot == _FALSE_){
+     on_the_spot = 0;
+   }
 
-  class_alloc(buffer,
-              buf_size,
-              pth->error_message);
 
-  /** - distribute addresses for each table */
+   /** - Fill the recombination structure with all important parameters */
+   class_call(fill_recombination_structure(ppr,pba,pth,preco),pth->error_message,pth->error_message);
 
-  rate_table.logTR_tab = (double*)buffer;
-  rate_table.TM_TR_tab = (double*)(rate_table.logTR_tab + NTR);
-  rate_table.logAlpha_tab[0] = (double**)(rate_table.TM_TR_tab+NTM);
-  rate_table.logAlpha_tab[1] = (double**)(rate_table.logAlpha_tab[0]+NTM);
-  rate_table.logAlpha_tab[0][0] = (double*)(rate_table.logAlpha_tab[1]+NTM);
-  for (j=1;j<NTM;j++) {
-    rate_table.logAlpha_tab[0][j] = (double*)(rate_table.logAlpha_tab[0][j-1]+NTR);
-  }
-  rate_table.logAlpha_tab[1][0] = (double*)(rate_table.logAlpha_tab[0][NTM-1]+NTR);
-  for (j=1;j<NTM;j++) {
-    rate_table.logAlpha_tab[1][j] = (double*)(rate_table.logAlpha_tab[1][j-1]+NTR);
-  }
-  rate_table.logR2p2s_tab = (double*)(rate_table.logAlpha_tab[1][NTM-1]+NTR);
+   /** - Compute the recombination history by calling hyrec_compute.
+         No CLASS-like error management here, but YAH working on it :) **/
 
-  xe_output = (double*)(rate_table.logR2p2s_tab+NTR);
-  Tm_output = (double*)(xe_output+param.nz);
+           hyrec_data.cosmo->h = pba->h;
+           hyrec_data.cosmo->T0 = pba->T_cmb;
+           hyrec_data.cosmo->orh2  = 4.48162687719e-7 *pba->T_cmb*pba->T_cmb*pba->T_cmb*pba->T_cmb *(1. + 0.227107317660239 * pba->Neff);
+           hyrec_data.cosmo->obh2 = pba->Omega0_b*pba->h*pba->h;
+           hyrec_data.cosmo->omh2 = Omega_m*pba->h*pba->h;
+           hyrec_data.cosmo->inj_params->odmh2 = hyrec_data.cosmo->omh2 - hyrec_data.cosmo->obh2;
+           hyrec_data.cosmo->okh2 = pba->Omega0_k*pba->h*pba->h;
+           hyrec_data.cosmo->odeh2 = (1.-Omega_m - hyrec_data.cosmo->okh2 - hyrec_data.cosmo->orh2/pba->h/pba->h)*pba->h*pba->h;
+          //  hyrec_data.w0 = pba->w0_fld;
+          //  hyrec_data.wa = pba->wa_fld;
+           hyrec_data.cosmo->Y = pth->YHe;
+           hyrec_data.cosmo->Nnueff = pba->Neff;
+           hyrec_data.cosmo->nH0 = 11.223846333047e-6*hyrec_data.cosmo->obh2*(1.-hyrec_data.cosmo->Y);  /* number density of hydrogen today in m-3 */
+           hyrec_data.cosmo->fHe = hyrec_data.cosmo->Y/(1-hyrec_data.cosmo->Y)/3.97153;              /* abundance of helium by number */
 
-  /* store sampled values of temperatures */
+           hyrec_data.cosmo->inj_params->Omega0_b = pba->Omega0_b;
+           hyrec_data.cosmo->inj_params->Omega0_cdm = pba->Omega0_cdm;
+           hyrec_data.cosmo->inj_params->Omega0_r = hyrec_data.cosmo->orh2/pow(pba->h,2);
+           hyrec_data.cosmo->inj_params->H0 = pba->h*100;
+          //  hyrec_data.cosmo->inj_params->zstart = ppr->recfast_z_initial; /* Redshift range */
+          //  hyrec_data.cosmo->inj_params->zend = 0.;
+          //  hyrec_data.cosmo->inj_params->dlna = 8.49e-5;
+          //  hyrec_data.cosmo->inj_params->nz = (long) floor(2+log((1.+hyrec_data.cosmo->inj_params->zstart)/(1.+hyrec_data.cosmo->inj_params->zend))/hyrec_data.cosmo->inj_params->dlna);
+           hyrec_data.cosmo->inj_params->pann = 1.78266e-21*pth->annihilation;
+           hyrec_data.cosmo->inj_params->pann_halo = 1.78266e-21*pth->annihilation_f_halo;
+           hyrec_data.cosmo->inj_params->on_the_spot = on_the_spot;
+           hyrec_data.cosmo->inj_params->decay_fraction = pth->decay_fraction;
+           hyrec_data.cosmo->inj_params->Gamma_dcdm_exo = pba->Gamma_dcdm_exo;
+           hyrec_data.cosmo->inj_params->f_eff = pth->f_eff;
+           hyrec_data.cosmo->inj_params->ann_f_halo = pth->annihilation_f_halo;
+           hyrec_data.cosmo->inj_params->ann_z_halo = pth->annihilation_z_halo;
+           hyrec_data.cosmo->inj_params->annihil_coef_num_lines = pth->annihil_coef_num_lines;
+           hyrec_data.cosmo->inj_params->annihil_coef_xe = pth->annihil_coef_xe;
+           hyrec_data.cosmo->inj_params->annihil_coef_heat = pth->annihil_coef_heat;
+           hyrec_data.cosmo->inj_params->annihil_coef_ionH = pth->annihil_coef_ionH;
+           hyrec_data.cosmo->inj_params->annihil_coef_ionHe = pth->annihil_coef_ionHe;
+           hyrec_data.cosmo->inj_params->annihil_coef_lya = pth->annihil_coef_lya;
+           hyrec_data.cosmo->inj_params->annihil_coef_lowE = pth->annihil_coef_lowE;
 
-  for (i = 0; i < NTR; i++)
-    rate_table.logTR_tab[i] = log(TR_MIN) + i * (log(TR_MAX)-log(TR_MIN))/(NTR-1.);
-  for (i = 0; i < NTM; i++)
-    rate_table.TM_TR_tab[i] = TM_TR_MIN + i * (TM_TR_MAX-TM_TR_MIN)/(NTM-1.);
+           hyrec_data.cosmo->inj_params->annihil_coef_dd_heat = pth->annihil_coef_dd_heat;
+           hyrec_data.cosmo->inj_params->annihil_coef_dd_ionH = pth->annihil_coef_dd_ionH;
+           hyrec_data.cosmo->inj_params->annihil_coef_dd_ionHe = pth->annihil_coef_dd_ionHe;
+           hyrec_data.cosmo->inj_params->annihil_coef_dd_lya = pth->annihil_coef_dd_lya;
+           hyrec_data.cosmo->inj_params->annihil_coef_dd_lowE = pth->annihil_coef_lowE;
+           hyrec_data.cosmo->inj_params->annihil_f_eff_num_lines = preco->annihil_f_eff_num_lines;
+           hyrec_data.cosmo->inj_params->annihil_z = preco->annihil_z;
+           hyrec_data.cosmo->inj_params->annihil_f_eff = preco->annihil_f_eff;
+           hyrec_data.cosmo->inj_params->annihil_dd_f_eff = preco->annihil_dd_f_eff;
 
-  rate_table.DlogTR = rate_table.logTR_tab[1] - rate_table.logTR_tab[0];
-  rate_table.DTM_TR = rate_table.TM_TR_tab[1] - rate_table.TM_TR_tab[0];
+           if ((pth->PBH_table_is_initialized) == _FALSE_ && pth->PBH_evaporating_mass > 0.) {
+             pth->PBH_table_is_initialized = _TRUE_;
+             preco->PBH_table_is_initialized = _TRUE_;
+             PBH_evaporating_mass_time_evolution(ppr,pba,preco,pth->error_message);
+             hyrec_data.cosmo->inj_params->PBH_table_is_initialized= preco->PBH_table_is_initialized;
+             hyrec_data.cosmo->inj_params->PBH_table_z = preco->PBH_table_z;
+             hyrec_data.cosmo->inj_params->PBH_table_mass = preco->PBH_table_mass;
+             hyrec_data.cosmo->inj_params->PBH_table_mass_dd = preco->PBH_table_mass_dd;
+             hyrec_data.cosmo->inj_params->PBH_table_F = preco->PBH_table_F;
+             hyrec_data.cosmo->inj_params->PBH_table_F_dd = preco->PBH_table_F_dd;
+             hyrec_data.cosmo->inj_params->PBH_table_size= preco->PBH_table_size;
+           }
 
-  /* read in file */
+            hyrec_data.cosmo->inj_params->PBH_low_mass = pth->PBH_evaporating_mass;
 
-  class_open(fA,ppr->hyrec_Alpha_inf_file, "r",pth->error_message);
-  class_open(fR,ppr->hyrec_R_inf_file, "r",pth->error_message);
 
-  for (i = 0; i < NTR; i++) {
-    for (j = 0; j < NTM; j++) {
-      for (l = 0; l <= 1; l++) {
-        if (fscanf(fA, "%le", &(rate_table.logAlpha_tab[l][j][i])) != 1)
-          class_stop(pth->error_message,"Error reading hyrec data file %s",ppr->hyrec_Alpha_inf_file);
-        rate_table.logAlpha_tab[l][j][i] = log(rate_table.logAlpha_tab[l][j][i]);
-      }
-    }
+           if(pth->energy_deposition_function==Analytical_approximation) {
+             hyrec_data.cosmo->inj_params->energy_deposition_treatment = 0;
+           }
+           else if(pth->energy_deposition_function==function_from_file || pth->energy_deposition_function==DarkAges) {
+             hyrec_data.cosmo->inj_params->energy_deposition_treatment = 1;
+           }
+           if(pth->energy_repart_coefficient==no_factorization) hyrec_data.cosmo->inj_params->energy_repart_coefficient = 0;
+           else if(pth->energy_repart_coefficient==GSVI || pth->energy_repart_coefficient ==chi_from_file) hyrec_data.cosmo->inj_params->energy_repart_coefficient = 1;
+           else if(pth->energy_repart_coefficient==SSCK) hyrec_data.cosmo->inj_params->energy_repart_coefficient = 2;
+           hyrec_data.cosmo->inj_params->f_esc = pth->f_esc;
+           hyrec_data.cosmo->inj_params->Zeta_ion = pth->Zeta_ion ; /**< Lyman continuum photon production efficiency of the stellar population */
+           hyrec_data.cosmo->inj_params->fx = pth->fx; /**< X-ray efficiency fudge factor of photons responsible for heating the medium. */
+           hyrec_data.cosmo->inj_params->Ex = pth->Ex*_eV_over_joules_; /**< Associated normalization from Pober et al. 1503.00045. */
+           hyrec_data.cosmo->inj_params->ap = pth->ap;   /**<  a few parameters entering the fit of the star formation rate (SFR), introduced in Madau & Dickinson, Ann.Rev.Astron.Astrophys. 52 (2014) 415-486, updated in Robertson & al. 1502.02024.*/
+           hyrec_data.cosmo->inj_params->bp = pth->bp;
+           hyrec_data.cosmo->inj_params->cp = pth->cp;
+           hyrec_data.cosmo->inj_params->dp = pth->dp;
+           hyrec_data.cosmo->inj_params->z_start_reio_stars = pth->z_start_reio_stars; /**< Controls the beginning of star reionisation, the SFR experiences is put to 0 above this value. */
+           hyrec_data.cosmo->fsR = alpha_ratio;
+           hyrec_data.cosmo->meR = me_ratio;
+           hyrec_data.cosmo->inj_params->Mpbh = pth->PBH_accreting_mass;
+           hyrec_data.cosmo->inj_params->fpbh = pth->PBH_fraction;
+           hyrec_data.cosmo->inj_params->coll_ion = pth->coll_ion_pbh;
+           hyrec_data.cosmo->inj_params->PBH_ADAF_delta = pth->PBH_ADAF_delta;
+           hyrec_data.cosmo->inj_params->PBH_accretion_eigenvalue = pth->PBH_accretion_eigenvalue;
+           if(pth->PBH_accretion_recipe == spherical_accretion) hyrec_data.cosmo->inj_params->PBH_accretion_recipe = 0;
+           else if(pth->PBH_accretion_recipe == disk_accretion) hyrec_data.cosmo->inj_params->PBH_accretion_recipe = 1;
+          //
 
-    if (fscanf(fR, "%le", &(rate_table.logR2p2s_tab[i])) !=1)
-      class_stop(pth->error_message,"Error reading hyrec data file %s",ppr->hyrec_R_inf_file);
-    rate_table.logR2p2s_tab[i] = log(rate_table.logR2p2s_tab[i]);
+   if (pth->thermodynamics_verbose > 0)
+     printf(" -> calling HyRec version %s,\n",HYREC_VERSION);
+   if (pth->thermodynamics_verbose > 0)
+     printf("by Y. Ali-Haïmoud & C. Hirata\n");
 
-  }
-  fclose(fA);
-  fclose(fR);
+   hyrec_compute_CLASS(&hyrec_data, FULL);
 
-  /* Read two-photon rate tables */
 
-  class_open(fA,ppr->hyrec_two_photon_tables_file, "r",pth->error_message);
+   /** - fill a few parameters in preco and pth */
 
-  for (b = 0; b < NVIRT; b++) {
-    if ((fscanf(fA, "%le", &(twog_params.Eb_tab[b])) != 1) ||
-        (fscanf(fA, "%le", &(twog_params.A1s_tab[b])) != 1) ||
-        (fscanf(fA, "%le", &(twog_params.A2s_tab[b])) != 1) ||
-        (fscanf(fA, "%le", &(twog_params.A3s3d_tab[b])) != 1) ||
-        (fscanf(fA, "%le", &(twog_params.A4s4d_tab[b])) != 1))
-      class_stop(pth->error_message,"Error reading hyrec data file %s",ppr->hyrec_two_photon_tables_file);
-  }
+   Nz=ppr->recfast_Nz0;
 
-  fclose(fA);
+   preco->rt_size = Nz;
+   preco->H0 = pba->H0 * _c_ / _Mpc_over_m_;
+   /* preco->H0 in inverse seconds (while pba->H0 is [H0/c] in inverse Mpcs) */
+   preco->YHe = pth->YHe;
+   preco->Nnow = 3.*preco->H0*preco->H0*pba->Omega0_b*(1.-preco->YHe)/(8.*_PI_*_G_*_m_H_);
+   /* energy injection parameters */
+   preco->annihilation = pth->annihilation;
+   preco->has_on_the_spot = pth->has_on_the_spot;
+   preco->decay_fraction = pth->decay_fraction;
+   preco->annihilation_f_halo = pth->annihilation_f_halo;
+   preco->annihilation_z_halo = pth->annihilation_z_halo;
+   pth->n_e=preco->Nnow;
 
-  /** - Normalize 2s--1s differential decay rate to L2s1s (can be set by user in hydrogen.h) */
-  L2s1s_current = 0.;
-  for (b = 0; b < NSUBLYA; b++) L2s1s_current += twog_params.A2s_tab[b];
-  for (b = 0; b < NSUBLYA; b++) twog_params.A2s_tab[b] *= L2s1s/L2s1s_current;
+   /** - allocate memory for thermodynamics interpolation tables (size known in advance) and fill it */
 
-  /*  In CLASS, we have neutralized the switches for the various
-      effects considered in Hirata (2008), keeping the full
-      calculation as a default; but you could restore their
-      functionality by copying a few lines from hyrec/hyrec.c to
-      here */
+   class_alloc(preco->recombination_table,preco->re_size*preco->rt_size*sizeof(double),pth->error_message);
 
-  /** - Compute the recombination history by calling a function in hyrec (no CLASS-like error management here) */
+   for(i = 0; i < Nz; i++) {
 
-  if (pth->thermodynamics_verbose > 0)
-    printf(" -> calling HyRec version %s,\n",HYREC_VERSION);
+     /** - --> get redshift, corresponding results from hyrec, and background quantities */
 
-  rec_build_history(&param, &rate_table, &twog_params, xe_output, Tm_output);
+     z = ppr->recfast_z_initial * (1. - (double)(i+1) / (double)Nz);
 
-  if (pth->thermodynamics_verbose > 0)
-    printf("    by Y. Ali-Haïmoud & C. Hirata\n");
+     xe = hyrec_xe(z, &hyrec_data);
+     Tm = hyrec_Tm(z, &hyrec_data);
 
-  /** - fill a few parameters in preco and pth */
+     class_call(background_tau_of_z(pba,
+                                    z,
+                                    &tau),
+                pba->error_message,
+                pth->error_message);
 
-  Nz=ppr->recfast_Nz0;
+     class_call(background_at_tau(pba,
+                                  tau,
+                                  pba->short_info,
+                                  pba->inter_normal,
+                                  &last_index_back,
+                                  pvecback),
+                pba->error_message,
+                pth->error_message);
 
-  preco->rt_size = Nz;
-  preco->H0 = pba->H0 * _c_ / _Mpc_over_m_;
-  /* preco->H0 in inverse seconds (while pba->H0 is [H0/c] in inverse Mpcs) */
-  preco->YHe = pth->YHe;
-  preco->Nnow = 3.*preco->H0*preco->H0*pba->Omega0_b*(1.-preco->YHe)/(8.*_PI_*_G_*_m_H_);
-  /* energy injection parameters */
-  preco->annihilation = pth->annihilation;
-  preco->has_on_the_spot = pth->has_on_the_spot;
-  preco->annihilation_variation = pth->annihilation_variation;
-  preco->annihilation_z = pth->annihilation_z;
-  preco->annihilation_zmax = pth->annihilation_zmax;
-  preco->annihilation_zmin = pth->annihilation_zmin;
-  preco->decay = pth->decay;
-  preco->annihilation_f_halo = pth->annihilation_f_halo;
-  preco->annihilation_z_halo = pth->annihilation_z_halo;
-  pth->n_e=preco->Nnow;
+     /*   class_call(thermodynamics_energy_injection(ppr,pba,preco,z,&energy_rate,pth->error_message),
+          pth->error_message,
+          pth->error_message);
+     */
 
-  /** - allocate memory for thermodynamics interpolation tables (size known in advance) and fill it */
+     /* Hz is H in inverse seconds (while pvecback returns [H0/c] in inverse Mpcs) */
+     Hz=pvecback[pba->index_bg_H] * _c_ / _Mpc_over_m_;
 
-  class_alloc(preco->recombination_table,preco->re_size*preco->rt_size*sizeof(double),pth->error_message);
+     /** - --> store the results in the table */
 
-  for(i=0; i <Nz; i++) {
+     /* results are obtained in order of decreasing z, and stored in order of growing z */
 
-    /** - --> get redshift, corresponding results from hyrec, and background quantities */
+     /* redshift */
+     *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_z)=z;
 
-    z = param.zstart * (1. - (double)(i+1) / (double)Nz);
+     /* ionization fraction */
+     *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_xe)=xe;
 
-    /* get (xe,Tm) by interpolating in pre-computed tables */
+     /* Tb */
+     *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_Tb)=Tm;
 
-    class_call(array_interpolate_cubic_equal(-log(1.+param.zstart),
-                                             param.dlna,
-                                             xe_output,
-                                             param.nz,
-                                             -log(1.+z),
-                                             &xe,
-                                             pth->error_message),
-               pth->error_message,
-               pth->error_message);
+     /* cb2 = (k_B/mu) Tb (1-1/3 dlnTb/dlna) = (k_B/mu) Tb (1+1/3 (1+z) dlnTb/dz)
+        with (1+z)dlnTb/dz= - [dlnTb/dlna] */
+     *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_cb2)
+       = _k_B_ / ( _c_ * _c_ * _m_H_ ) * (1. + (1./_not4_ - 1.) * pth->YHe + xe * (1.-pth->YHe)) * Tm *(1. - hyrec_dTmdlna(z, &hyrec_data) / Tm / 3.);
 
-    class_call(array_interpolate_cubic_equal(-log(1.+param.zstart),
-                                             param.dlna,
-                                             Tm_output,
-                                             param.nz,
-                                             -log(1.+z),
-                                             &Tm,
-                                             pth->error_message),
-               pth->error_message,
-               pth->error_message);
+     /* dkappa/dtau = a n_e x_e sigma_T = a^{-2} n_e(today) x_e sigma_T (in units of 1/Mpc) */
+     *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_dkappadtau)
+       = (1.+z) * (1.+z) * preco->Nnow * xe * _sigma_ * _Mpc_over_m_;
 
-    class_call(background_tau_of_z(pba,
-                                   z,
-                                   &tau),
-               pba->error_message,
-               pth->error_message);
+   }
 
-    class_call(background_at_tau(pba,
-                                 tau,
-                                 pba->short_info,
-                                 pba->inter_normal,
-                                 &last_index_back,
-                                 pvecback),
-               pba->error_message,
-               pth->error_message);
+   /* Cleanup */
+   free(buffer);
+   hyrec_free(&hyrec_data);
+ #else
 
-    /*   class_call(thermodynamics_energy_injection(ppr,pba,preco,z,&energy_rate,pth->error_message),
-         pth->error_message,
-         pth->error_message);
-    */
+   class_stop(pth->error_message,
+              "you compiled without including the HyRec code, and now wish to use it. Either set the input parameter 'recombination' to something else than 'HyRec', or recompile after setting in the Makefile the appropriate path HYREC=... ");
 
-    /* Hz is H in inverse seconds (while pvecback returns [H0/c] in inverse Mpcs) */
-    Hz=pvecback[pba->index_bg_H] * _c_ / _Mpc_over_m_;
+ #endif
+   return _SUCCESS_;
+ }
 
-    /** - --> store the results in the table */
 
-    /* results are obtained in order of decreasing z, and stored in order of growing z */
-
-    /* redshift */
-    *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_z)=z;
-
-    /* ionization fraction */
-    *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_xe)=xe;
-
-    /* Tb */
-    *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_Tb)=Tm;
-
-    /* cb2 = (k_B/mu) Tb (1-1/3 dlnTb/dlna) = (k_B/mu) Tb (1+1/3 (1+z) dlnTb/dz)
-       with (1+z)dlnTb/dz= - [dlnTb/dlna] */
-    *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_cb2)
-      = _k_B_ / ( _c_ * _c_ * _m_H_ ) * (1. + (1./_not4_ - 1.) * pth->YHe + xe * (1.-pth->YHe)) * Tm * (1. - rec_dTmdlna(xe, Tm, pba->T_cmb*(1.+z), Hz, param.fHe, param.nH0*pow((1+z),3)*1e-6, energy_injection_rate(&param,z)) / Tm / 3.);
-
-    /* dkappa/dtau = a n_e x_e sigma_T = a^{-2} n_e(today) x_e sigma_T (in units of 1/Mpc) */
-    *(preco->recombination_table+(Nz-i-1)*preco->re_size+preco->index_re_dkappadtau)
-      = (1.+z) * (1.+z) * preco->Nnow * xe * _sigma_ * _Mpc_over_m_;
-
-  }
-
-  /* Cleanup */
-
-  free(buffer);
-
-#else
-
-  class_stop(pth->error_message,
-             "you compiled without including the HyRec code, and now wish to use it. Either set the input parameter 'recombination' to something else than 'HyRec', or recompile after setting in the Makefile the appropriate path HYREC=... ");
-
-#endif
-
-  return _SUCCESS_;
-}
 int fill_recombination_structure(struct precision * ppr,
                                  struct background * pba,
                                  struct thermo * pth,
@@ -5129,7 +4877,7 @@ int thermodynamics_derivs_with_recfast(
   timeTh=(1./(preco->CT*pow(Trad,4)))*(1.+x+preco->fHe)/x;
   timeH=2./(3.*preco->H0*pow(1.+z,1.5));
 
-/************/
+  /************/
   /* hydrogen */
   /************/
 
@@ -5228,6 +4976,7 @@ int thermodynamics_derivs_with_recfast(
 
   return _SUCCESS_;
 }
+
 /**
  * This routine merges the two tables 'recombination_table' and
  * 'reionization_table' inside the table 'thermodynamics_table', and
@@ -5254,7 +5003,7 @@ int thermodynamics_merge_reco_and_reio(
 
   /** - first, a little check that the two tables match each other and can be merged */
 
-  if ((pth->reio_parametrization != reio_none)) {
+  if (pth->reio_parametrization != reio_none) {
     class_test(preco->recombination_table[preio->index_reco_when_reio_start*preco->re_size+preco->index_re_z] !=
                preio->reionization_table[(preio->rt_size -1)*preio->re_size+preio->index_re_z],
                pth->error_message,
@@ -5304,26 +5053,9 @@ int thermodynamics_merge_reco_and_reio(
   /** - free the temporary structures */
 
   free(preco->recombination_table);
-  if(pth->annihilation >0 || pth->decay_fraction > 0 || pth->PBH_accreting_mass > 0 || pth->PBH_evaporating_mass > 0){
-    if(pth->has_on_the_spot == _FALSE_ && pth->energy_repart_coefficient!=no_factorization){
-      thermodynamics_annihilation_f_eff_free(preco);
-    }
-    if(pth->energy_repart_coefficient == GSVI || pth->energy_repart_coefficient==no_factorization || pth->energy_repart_coefficient ==chi_from_file){
-      thermodynamics_annihilation_coefficients_free(pth);
-    }
-  }
-  if ((pth->reio_parametrization != reio_none))
-    free(preio->reionization_table);
 
-  if ((preco->PBH_table_is_initialized == _TRUE_) && pth->PBH_evaporating_mass > 0.) {
-    // fprintf(stdout,"PBH tabels are free'd\n");
-    free(preco->PBH_table_z);
-    free(preco->PBH_table_mass);
-    free(preco->PBH_table_mass_dd);
-    free(preco->PBH_table_F);
-    free(preco->PBH_table_F_dd);
-    pth->PBH_table_is_initialized == _FALSE_;
-  }
+  if (pth->reio_parametrization != reio_none)
+    free(preio->reionization_table);
 
   return _SUCCESS_;
 }
@@ -5414,6 +5146,78 @@ int thermodynamics_tanh(double x,
                         double * result) {
 
   *result = before + (after-before)*(tanh((x-center)/width)+1.)/2.;
+
+  return _SUCCESS_;
+}
+
+
+int loop_over_background(struct background * pba,
+                         struct precision * ppr){
+  double convergence, Omega_tot, Old_Omega_neutrinos;
+  int n_ncdm;
+  convergence = 1;
+  Old_Omega_neutrinos = 0;
+  Omega_tot = 0;
+
+
+  while(fabs(convergence) > pba->convergence_tol_decaying_neutrinos){
+    if(pba->background_verbose>0)printf("Old Omega_lambda = %e\n", pba->Omega0_lambda);
+    pba->free_input_parameters = _FALSE_;
+
+    //update pba->Omega0_lambda.
+    Omega_tot = 0;
+    Omega_tot += pba->Omega0_g;
+    Omega_tot += pba->Omega0_b;
+    if(pba->has_ur == _TRUE_)  Omega_tot += pba->Omega0_ur;
+    if(pba->has_cdm == _TRUE_)  Omega_tot += pba->Omega0_cdm;
+    if(pba->has_dcdm == _TRUE_)  Omega_tot += pba->Omega0_dcdm;
+    if(pba->has_dr == _TRUE_)  Omega_tot += pba->Omega0_dr;
+    if(pba->has_scf == _TRUE_)  Omega_tot += pba->Omega0_scf;
+    if(pba->has_fld == _TRUE_)  Omega_tot += pba->Omega0_fld;
+    if(pba->has_ncdm == _TRUE_) Omega_tot += pba->Omega0_ncdm_tot;
+    pba->Omega0_lambda = 1. - pba->Omega0_k - Omega_tot;
+    //update Old_Omega_neutrinos;
+    for(n_ncdm = 0;n_ncdm < pba->N_ncdm;n_ncdm ++){
+      if(pba->background_ncdm_distribution[n_ncdm]==_decaying_neutrinos_ || pba->background_ncdm_distribution[n_ncdm]==_massive_daughter_ ) Old_Omega_neutrinos = pba->Omega0_ncdm[n_ncdm];
+    }
+    //free the background structure
+    if (background_free(pba) == _FAILURE_) {
+      printf("\n\nError in background_free when iterating \n=>%s\n",pba->error_message);
+      return _FAILURE_;
+    }
+    //re-calculate the background structure
+    if (background_init(ppr,pba) == _FAILURE_) {
+      printf("\n\nError in background_init when iterating \n=>%s\n",pba->error_message);
+      return _FAILURE_;
+    }
+
+
+
+    for(n_ncdm = 0;n_ncdm < pba->N_ncdm;n_ncdm ++){
+      if(pba->background_ncdm_distribution[n_ncdm]==_decaying_neutrinos_ || pba->background_ncdm_distribution[n_ncdm]==_massive_daughter_){
+        // printf("pba->Omega0_ncdm[n_ncdm] %e Old_Omega_neutrinos %e Omega_tot_neutrinos %e\n",pba->Omega0_ncdm[n_ncdm],Old_Omega_neutrinos,pba->Omega0_ncdm_tot);
+        if(Old_Omega_neutrinos!=0.0)convergence = fabs(pba->Omega0_ncdm[n_ncdm]/Old_Omega_neutrinos-1);
+        else convergence = 0;
+      }
+    }
+    if(convergence<=pba->convergence_tol_decaying_neutrinos){
+      //store the new pba->Omega0_lambda.
+      Omega_tot = 0;
+      Omega_tot += pba->Omega0_g;
+      Omega_tot += pba->Omega0_b;
+      if(pba->has_ur == _TRUE_)  Omega_tot += pba->Omega0_ur;
+      if(pba->has_cdm == _TRUE_)  Omega_tot += pba->Omega0_cdm;
+      if(pba->has_dcdm == _TRUE_)  Omega_tot += pba->Omega0_dcdm;
+      if(pba->has_dr == _TRUE_)  Omega_tot += pba->Omega0_dr;
+      if(pba->has_scf == _TRUE_)  Omega_tot += pba->Omega0_scf;
+      if(pba->has_fld == _TRUE_)  Omega_tot += pba->Omega0_fld;
+      if(pba->has_ncdm == _TRUE_) Omega_tot += pba->Omega0_ncdm_tot;
+      // printf("Omega0_ncdm_tot %e Omega0_dr %e\n",pba->Omega0_ncdm_tot, pba->Omega0_dr);
+      pba->Omega0_lambda = 1. - pba->Omega0_k - Omega_tot;
+    }
+    if(pba->background_verbose>0)printf("New Omega_lambda = %e, convergence = %e\n", pba->Omega0_lambda, convergence);
+
+  }
 
   return _SUCCESS_;
 }
