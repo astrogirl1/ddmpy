@@ -303,7 +303,8 @@ def loading_from_specfiles(fnames, transfer_functions, mass, photon_energy, logE
 	else:
 		spectra = np.empty(shape=(3,1,len(fnames)), dtype=np.float64)
 		if hist == 'decay':
-			# logEnergies = np.ones((1,))*np.log10(1e9*0.5*mass)
+			# logEnergies = np.ones((1,))*np.log10(1e9*0.5*mass)# need to only supply energy not energy fraction. Photon in GeV. 
+			# logEnergies = np.ones((1,))*np.log10(1e9*0.5*photon_energy) #Changed form mass/2 to energy due to decay into gravitino and photon, its considering only photon here 
 			logEnergies = np.ones((1,))*np.log10(1e9*photon_energy)
 			sys.stderr.write("mass of bino is  %.10g \n" %mass)
 		elif hist == 'annihilation' or hist =='annihilation_halos':
@@ -314,10 +315,12 @@ def loading_from_specfiles(fnames, transfer_functions, mass, photon_energy, logE
 			if fname == 'Dirac_electron' or fname == 'dirac_electron':
 				spectra[:,:,idx] = np.array([2.,0.,0.]).reshape(3,1)
 			elif fname == 'Dirac_photon' or fname == 'dirac_photon':
-				spectra[:,:,idx] = np.array([0.,1.,0.]).reshape(3,1)
+				spectra[:,:,idx] = np.array([0.,1.,0.]).reshape(3,1)   #Changed [0,2,0] -> [0,1,0] only one photon released at that logEnergy - MD
 			else:
 				raise DarkAgesError('I could not interpret the spectrum-input >>{0}<< in combination with dirac-like injection spectra.'.format(fname))
 		tot_spec = np.tensordot(spectra, branchings, axes=(2,0))
+		for spectrad in tot_spec:
+			np.savetxt("spectra.txt", tot_spec)
 
 	if hist == 'decay':
 		model_from_file = decaying_model(tot_spec[0], tot_spec[1], tot_spec[2], 1e9*mass, 1e9*photon_energy, t_dec,logEnergies,redshift, **DarkOptions)
