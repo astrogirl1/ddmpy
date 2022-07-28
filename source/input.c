@@ -964,7 +964,7 @@ int input_read_parameters(
     /* GFA: Convert Gamma to Mpc */
     if (flag1 == _TRUE_)
       pba->Gamma_dcdm_wdm = param1 * (1.e3 / _c_);
-    fprintf(stdout, "Gamma_wdm = %.5e. \n", pba->Gamma_dcdm_wdm);
+      fprintf(stdout, "Gamma_wdm = %.5e. \n", pba->Gamma_dcdm_wdm);
     if (flag2 == _TRUE_)
       pba->Gamma_dcdm_wdm = pow(10., param2) * (1.e3 / _c_);
     if (flag3 == _TRUE_)
