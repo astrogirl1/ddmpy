@@ -571,7 +571,7 @@ int input_read_parameters(
   double c_cor = 0.;
 
   double Omega_tot;
-  int test_param = 1;
+  int test_param = 0;
 
   int i;
 
@@ -1789,9 +1789,12 @@ int input_read_parameters(
     class_call(parser_read_double(pfc, "Gamma_dcdm_exo", &param1, &flag1, errmsg),
                errmsg,
                errmsg);
-    class_call(parser_read_double(pfc, "log10_Gamma_dcdm_exo", &param2, &flag2, errmsg),
-               errmsg,
-               errmsg);
+    // class_call(parser_read_double(pfc, "log10_Gamma_dcdm_exo", &param2, &flag2, errmsg),
+    //            errmsg,
+    //            errmsg);
+    class_call(parser_read_double(pfc,"tau_dcdm_exo",&param2,&flag2,errmsg),
+             errmsg,
+             errmsg);
 
     class_test(((flag1 == _TRUE_) && (flag2 == _TRUE_)),
                errmsg,
@@ -1806,9 +1809,16 @@ int input_read_parameters(
       fprintf(stdout, "you have chosen Gamma = %e km/s/Mpc, tau = %e s, Gamma_wdm = %e  \n", pba->Gamma_dcdm_exo / (1.e3 / _c_), pba->tau_dcdm_exo);
     }
 
-    if (flag2 == _TRUE_)
-      pba->Gamma_dcdm_exo = pow(10., param2) * (1.e3 / _c_);
-    pba->tau_dcdm_exo = 1 / (pba->Gamma_dcdm_exo * 1.02e-3) * (1e9 * 365 * 24 * 3600); // convert to sec.
+    // if (flag2 == _TRUE_)
+    // {
+    //   pba->Gamma_dcdm_exo = pow(10., param2) * (1.e3 / _c_);
+    //   pba->tau_dcdm_exo = 1 / (pba->Gamma_dcdm_exo * 1.02e-3) * (1e9 * 365 * 24 * 3600); // convert to sec.
+    // }
+
+    if (flag2 == _TRUE_){
+    pba->Gamma_dcdm_exo = 1/(param2/(1e9*365*24*3600))/1.02e-3*(1.e3 / _c_); //1 km s^-1 Mpc-^1 = 1.02* 10^-3 Gyr^-1
+    pba->tau_dcdm_exo = param2;
+  }
 
     // pba->epsilon_dcdm_wdm = 1;
     /*Read photon_energy*/
