@@ -827,7 +827,6 @@ int input_read_parameters(
   if (flag2 == _TRUE_)
     pba->Omega0_dcdmdr = param2 / pba->h / pba->h;
 
-  fprintf(stdout, "you have chosen dcdmdr = %e  \n", pba->Omega0_dcdmdr);
   if (pba->Omega0_dcdmdr > 0)
   {
 
@@ -4687,12 +4686,19 @@ int input_default_precision(struct precision *ppr)
 
   ppr->recfast_H_frac = 1.e-3; /* from recfast 1.4 */
 
+  // sprintf(ppr->hyrec_Alpha_inf_file, __CLASSDIR__);
+  // strcat(ppr->hyrec_Alpha_inf_file, "/hyrec/Alpha_inf.dat");
+  // sprintf(ppr->hyrec_R_inf_file, __CLASSDIR__);
+  // strcat(ppr->hyrec_R_inf_file, "/hyrec/R_inf.dat");
+  // sprintf(ppr->hyrec_two_photon_tables_file, __CLASSDIR__);
+  // strcat(ppr->hyrec_two_photon_tables_file, "/hyrec/two_photon_tables.dat");
+
   sprintf(ppr->hyrec_Alpha_inf_file, __CLASSDIR__);
-  strcat(ppr->hyrec_Alpha_inf_file, "/hyrec/Alpha_inf.dat");
+  strcat(ppr->hyrec_Alpha_inf_file, "/HyRec_2017/data/Alpha_inf.dat");
   sprintf(ppr->hyrec_R_inf_file, __CLASSDIR__);
-  strcat(ppr->hyrec_R_inf_file, "/hyrec/R_inf.dat");
+  strcat(ppr->hyrec_R_inf_file, "/HyRec_2017/data/R_inf.dat");
   sprintf(ppr->hyrec_two_photon_tables_file, __CLASSDIR__);
-  strcat(ppr->hyrec_two_photon_tables_file, "/hyrec/two_photon_tables.dat");
+  strcat(ppr->hyrec_two_photon_tables_file, "/HyRec_2017/data/two_photon_tables.dat");
 
   /* for reionization */
 
@@ -5433,7 +5439,7 @@ int input_get_guess(double *xguess,
 
     case omega_dcdmdrwdm: /* GFA */
       //  Omega_M =ba.Omega0_dcdmdrwdm+ba.Omega0_b+ba.Omega0_cdm; /* GFA  */
-      Omega_M = ba.Omega0_dcdmdrwdm + ba.Omega0_b + 0.0001; /* MD  */
+      Omega_M = ba.Omega0_dcdmdrwdm + ba.Omega0_b + ba.Omega0_cdm; /* MD  */
       gamma = ba.Gamma_dcdm_wdm / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;
@@ -5496,7 +5502,7 @@ int input_get_guess(double *xguess,
           omega_ini_dcdm2 -> omega_dcdmdrwdm */
       Omega0_dcdmdrwdm *= pfzw->target_value[index_guess];
       // Omega_M = Omega0_dcdmdrwdm+ba.Omega0_cdm+ba.Omega0_b;
-      Omega_M = Omega0_dcdmdrwdm + 0.0001 + ba.Omega0_b;
+      Omega_M = Omega0_dcdmdrwdm + ba.Omega0_cdm + ba.Omega0_b;
       gamma = ba.Gamma_dcdm_wdm / ba.H0;
       if (gamma < 1)
         a_decay = 1.0;

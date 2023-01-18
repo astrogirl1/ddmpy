@@ -2,7 +2,7 @@ import math
 import natpy as nat
 
 
-years = 100000 * nat.yr
+years = 55 * nat.yr
 gyr = nat.convert(years, nat.Gyr)
 print(gyr)
 

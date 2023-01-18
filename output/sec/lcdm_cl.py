@@ -2,11 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import itertools
 
-files = ['/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/lcdm_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/wdm_gam1.25_eps0.0067_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/wdm_gam1.0_eps0.0067_cl.dat']
+files = ['/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/lcdm_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output/test1_eps0.0069_merged_cl.dat', '/home/a1705053/Desktop/poulin/class_decays/output/test1_eps0.0069_cl.dat']
 data = []
 for data_file in files:
     data.append(np.loadtxt(data_file))
-roots = ['lcdm_cl', 'wdm_gam1', 'wdm_gam1']
+roots = ['lcdm_cl', 'test1_eps0', 'test1_eps0']
 
 fig, ax = plt.subplots()
 

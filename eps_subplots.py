@@ -2,6 +2,7 @@ from turtle import color
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import matplotlib.colors as mcolors
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import numpy as np
 import itertools
 
@@ -30,7 +31,7 @@ files1 = ['/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/lcdm_cl.d
 '/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/wdm_gam1.25_eps0.025_cl.dat']
 
 files2 = ['/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/lcdm_cl.dat',
-'/home/a1705053/Desktop/merged/merged_codes_may22/output/wdm_eps/wdm_gam1.47_eps0.001_cl.dat' ,
+'/home/a1705053/Desktop/merged/merged_codes_may22/output/sec/wdm_gam1.25_eps0.001_cl.dat' ,
 '/home/a1705053/Desktop/merged/merged_codes_may22/output/wdm_eps/wdm_gam1.47_eps0.003_cl.dat',
 '/home/a1705053/Desktop/merged/merged_codes_may22/output/wdm_eps/wdm_gam1.47_eps0.005_cl.dat' ,
 '/home/a1705053/Desktop/merged/merged_codes_may22/output/wdm_eps/wdm_gam1.47_eps0.007_cl.dat',
@@ -91,14 +92,15 @@ eps = [0, 0.001, 0.003, 0.005, 0.007, 0.009, 0.01, 0.015, 0.02, 0.025]
 
 fig, ax = plt.subplots(2, sharex=True, sharey=True, gridspec_kw={'height_ratios': [2, 3]})
 
-
 y_axis = [u'TT']
 tex_names = ['TT']
 x_axis = 'l'
 ylim = []
 xlim = []
 
-color = ['goldenrod','blue', 'green','chocolate', 'orangered', 'orchid', 'orange', 'magenta','red']
+# color = ['goldenrod','blue', 'green','chocolate', 'orangered', 'orchid', 'orange', 'magenta','red']
+color = ['darkslateblue','tomato', 'limegreen']
+cmap1 = LinearSegmentedColormap.from_list("mycmap", color)
 
 # color = ['black', 'goldenrod','orange', 'darkorange', 'red', 'blueviolet']
 
@@ -113,14 +115,14 @@ xlim = []
 # ax[1].semilogx(curve0[:, 0], (curve0[:, 1]), color='black', linewidth = 2.2)
 
 n = len(data1[1:])
-colors = plt.cm.cool_r(np.linspace(0, 1, n))
-colors_l = cm.cool_r
+colors = cmap1(np.linspace(0, 1, n))
+colors_l = cmap1
 
 for idx, dat in enumerate(data1[1:]):
     index, curve = idx, dat
        
     for i in range(n):
-        ax[0].semilogx(curve[:, 0], (curve[:, 1]), color = colors[idx] , linewidth=1.3)
+        ax[0].semilogx(curve[:, 0], (curve[:, 1]/curve0[:, 1]-1), color = colors[idx] , linewidth=1.3)
 
 ax[0].set_title("$\epsilon$ varied, $\Gamma_{wdm}$ constant ", loc='center')
 plt.ylabel(r'$C_\ell^\mathrm{TT}$',fontsize=15)
@@ -129,20 +131,18 @@ for idx, dat in enumerate(data2[1:]):
     index, curve = idx, dat
        
     for i in range(n):
-        ax[1].semilogx(curve[:, 0], (curve[:, 1]), color = colors[idx] , linewidth=1.3)
+        ax[1].semilogx(curve[:, 0], (curve[:, 1]/curve0[:, 1]-1), color = colors[idx] , linewidth=1.3)
 
-# fig.legend([root for (root, elem) in
-#     itertools.product(roots, y_axis)], loc='best')
 
 ax[1].set_xlabel('$\ell$', fontsize=16)
 ax[1].set_xlim(3,2700)
-ax[0].semilogx(curve0[:, 0], (curve0[:, 1]), color='black', linewidth = 2.2)
-ax[1].semilogx(curve1[:, 0], (curve1[:, 1]), color='black', linewidth = 2.2)
-ax[0].annotate(r'$\Gamma_{wdm}^{-1} = 55 Gyr$', xy=(10.5, 8e-10))
-ax[1].annotate(r'$\Gamma_{wdm}^{-1} = 30 Gyr$', xy=(10.5, 8e-10))
+ax[0].semilogx(curve0[:, 0], (curve0[:, 1]), color='black', linewidth = 2.2, linestyle='dashed')
+ax[1].semilogx(curve1[:, 0], (curve1[:, 1]), color='black', linewidth = 2.2, linestyle='dashed')
+ax[0].annotate(r'$\Gamma_{wdm}^{-1} = 55 Gyr$', xy=(10.5, 1))
+ax[1].annotate(r'$\Gamma_{wdm}^{-1} = 30 Gyr$', xy=(10.5, 1))
 
 # plt.ylabel(r'$\frac{C_\ell^\mathrm{TT}(\Lambda\mathrm{DDM})}{C_\ell^\mathrm{TT}(\Lambda \mathrm{LCDM})}-1$',fontsize=15)
-plt.ylabel(r'$C_\ell^\mathrm{TT}$',fontsize=15)
+ax[0].set_ylabel(r'$C_\ell^\mathrm{TT}$',fontsize=15)
 # plt.title("pe varied, $\Gamma_{exo}$ = 1e-2 km/s/Mpc ", loc='center')
 normalize = mcolors.Normalize(vmin=min(eps), vmax=max(eps))
 scalarmappaple = cm.ScalarMappable(norm=normalize, cmap=colors_l)
@@ -150,6 +150,11 @@ scalarmappaple.set_array(eps)
 # plt.colorbar(scalarmappaple)
 fig.colorbar(scalarmappaple, orientation='horizontal', label='$\\epsilon$')
 # plt.savefig('wdm_eps_1208',dpi=300)
+
+# fig.legend([root for (root, elem) in
+#     itertools.product(roots, y_axis)], loc='best')
+fig.legend()
+
 plt.show()
 plt.clf()
 
