@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import itertools
+# plt.rcParams.update({"figure.autolayout":True})
 
 # files = ['/home/a1705053/Desktop/merged/merged_codes_may22/output23/lcdm_hyrec_cl.dat','/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps1e-50_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps1e-25_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps1e-10_cl.dat','/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps1e-5_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps1e-3_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps1e-2_cl.dat', '/home/a1705053/Desktop/merged/merged_codes_may22/output23/test_g80_eps5e-2_cl.dat']
 
@@ -35,7 +36,7 @@ roots = [r'$\Lambda$CDM', r'$E_{\gamma}=10^{-2}$GeV, $\tau=10^{19}$s ', r'$E_{\g
 # roots = [r'$\Lambda$CDM', r'$\epsilon$ = 0.005 ', r'$\epsilon$ = 0.009 ', r'$\epsilon$ = 0.01']
 #color = ['black', 'goldenrod','orange', 'darkorange', 'red', 'blueviolet'] 
 
-fig, (ax1, ax2) = plt.subplots(2, sharex=True)
+fig, (ax1, ax2) = plt.subplots(2, sharex=True,figsize=(15,10))
 #TT#
 index0, curve0 = 0, data[0]
 y_axis = [u'TT']
@@ -48,37 +49,41 @@ xlim = []
 # x.append(curve0[:, 0])
 # y.append(curve0[:, 1])
 # print(y)
-ax1.semilogx(curve0[:, 0],(curve0[:, 1]), color='black', linewidth=1.5, linestyle='dashdot')
-ax2.semilogx(curve0[:, 0],(curve0[:, 1]), color='black', linewidth=1.5, linestyle='dashdot')
+ax1.semilogx(curve0[:, 0],(curve0[:, 1]), color='black', linewidth=1.3, linestyle='dashdot')
+ax2.semilogx(curve0[:, 0],(curve0[:, 1]), color='black', linewidth=1.3, linestyle='dashdot')
 
 index, curve = 1, data[1]
-ax1.semilogx(curve[:, 0], (curve[:, 1]),linestyle='dashed',color='blue')
-ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1,linestyle='dashed',color='blue')
+ax1.semilogx(curve[:, 0], (curve[:, 1]),linestyle='dashed',color='blue',linewidth=1.2)
+ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1,linestyle='dashed',color='blue',linewidth=1.2)
 
 index, curve = 2, data[2] 
-ax1.semilogx(curve[:, 0], (curve[:, 1]),linestyle='dashed',color='tab:green')
-ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1,linestyle='dashed',color='tab:green')
+ax1.semilogx(curve[:, 0], (curve[:, 1]),linestyle='dashed',color='tab:green',linewidth=1.2)
+ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1,linestyle='dashed',color='tab:green',linewidth=1.2)
 
 index, curve = 3, data[3] 
-ax1.semilogx(curve[:, 0], (curve[:, 1]), linestyle='dashed',color='orange')
-ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1,linestyle='dashed',color='orange')
+ax1.semilogx(curve[:, 0], (curve[:, 1]), linestyle='dashed',color='orange',linewidth=1.2)
+ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1,linestyle='dashed',color='orange',linewidth=1.2)
 
 index, curve = 4, data[4] 
-ax1.semilogx(curve[:, 0], (curve[:, 1]), linestyle='dashed',color='red')
-ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1, linestyle='dashed', color='red')
+ax1.semilogx(curve[:, 0], (curve[:, 1]), linestyle='dashed',color='red',linewidth=1.2)
+ax2.semilogx(curve[:, 0], (curve[:, 1])/(curve0[:, 1])-1, linestyle='dashed', color='red',linewidth=1.2)
 
 
 ax1.legend([root+': '+elem for (root, elem) in
-    itertools.product(roots, y_axis)], loc='upper left', fontsize=17)
+    itertools.product(roots, y_axis)], loc='upper left', fontsize=18, framealpha=0.1)
 
-ax2.set_xlabel('$\ell$', fontsize=20)
-ax1.set_ylabel(r'$C_\ell^\mathrm{TT}$',fontsize=20)
-ax2.set_ylabel(r'$\frac{C_\ell^{\mathrm{TT}}(\Lambda DDM)}{C_\ell^{\mathrm{TT}}(\Lambda CDM)}-1$',fontsize=20)
+ax2.set_xlabel('$\ell$', fontsize=22)
+ax1.set_ylabel(r'$C_\ell^\mathrm{TT}$',fontsize=22)
+ax2.set_ylabel(r'$\frac{C_\ell^{\mathrm{TT}}(\Lambda DDM)}{C_\ell^{\mathrm{TT}}(\Lambda CDM)}-1$',fontsize=22)
 
 plt.subplots_adjust(wspace=0,hspace=0)
+text = ax1.yaxis.get_offset_text()
+
+# Set the size.
+text.set_size(15) # Overkill!
 plt.xticks(fontsize=20)
-ax1.tick_params(labelsize=18)
-ax2.tick_params(labelsize=18)
+ax1.tick_params(labelsize=20)
+ax2.tick_params(labelsize=20)
 plt.savefig("chap4gam.pdf", format="pdf")
 plt.show()
 
