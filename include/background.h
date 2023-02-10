@@ -109,7 +109,7 @@ struct background
   double Omega0_k; /**< \f$ \Omega_{0_k} \f$: curvature contribution */
   double tau_dcdm_exo;
   int N_ncdm;                            /**< Number of distinguishable ncdm species */
-  int test_param;
+  int first_decay;
   double * M_ncdm;                       /**< vector of masses of non-cold relic:
                                              dimensionless ratios m_ncdm/T_ncdm */
   double * Omega0_ncdm, Omega0_ncdm_tot; /**< Omega0_ncdm for each species and for the total Omega0_ncdm */

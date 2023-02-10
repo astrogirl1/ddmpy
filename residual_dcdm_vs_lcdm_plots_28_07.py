@@ -132,7 +132,7 @@ for i in range(4):
     # M.set({
     # 'omega_cdm': 0.0001,
     # 'T_cmb':2.7255,
-    # 'test_param': 1,
+    # 'first_decay': 1,
     # # 'on the spot' : 'no', 
     # # 'energy_deposition_function' : 'DarkAges', 
     # # 'DarkAges_mode' : 'built_in',

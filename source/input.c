@@ -571,7 +571,7 @@ int input_read_parameters(
   double c_cor = 0.;
 
   double Omega_tot;
-  int test_param = 0;
+  int first_decay = 0;
 
   int i;
 
@@ -1779,10 +1779,10 @@ int input_read_parameters(
   /** - energy injection parameters from CDM annihilation/decay */
   /** - Reading energy injection parameters from CDM annihilation/decay && PBH evaporation/accretion */
   /** - This includes many tests to make sure the user is giving meaningful commands */
-  class_read_int("test_param", test_param);
-  if ((test_param == 1))
+  class_read_int("first_decay", first_decay);
+  if ((first_decay == 1))
   {
-    fprintf(stdout, "test_param = %i s \n", test_param);
+    fprintf(stdout, "first_decay = %i s \n", first_decay);
 
     /** - Read Gamma in same units as H0, i.e. km/(s Mpc)*/
     class_call(parser_read_double(pfc, "Gamma_dcdm_exo", &param1, &flag1, errmsg),
